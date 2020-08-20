@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+
+
+    <title>Calcifer</title>
+
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .site-title-font{
+            color: red;
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 27px;
+        }
+        .size{
+            width: auto;
+            height: 800px;
+        }
+        .wrap {
+            width: 900px;
+            margin-top:100px;
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+        .background{
+            background-color:black;
+        }
+        .ranking-font{
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 30px;
+        }
+        .date-font-color{
+            color: gray;
+        }
+
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            searchMovie();
+        });
+        function onClickBtnLogOut() {
+            $.ajax({
+                url: '/logout',
+                method: 'POST',
+                data: {},
+                success: function (response) {
+                    $(location).attr('href', '/');
+                }
+            })
+        }
+        function onClickHome() {
+            $(location).attr('href', '/');
+        }
+        function onClickRate() {
+            $(location).attr('href', '/rating');
+        }
+        function onClickGenre() {
+            $(location).attr('href', '/genre');
+        }
+        function onClickSearch() {
+            $(location).attr('href', '/search');
+        }
+        function onClickMypage() {
+            $(location).attr('href', '/mypage');
+        }
+
+        function searchMovie(search_input) {
+            $('#cards-box').empty()
+            let movietitle = $('#search_input').val();
+            console.log(movietitle);
+            $.ajax({
+                type: 'GET',
+                url: 'https://api.themoviedb.org/3/search/movie?api_key=a338932a06b8f07fb4c5638b91007531&language=ko-KR&query='+movietitle,
+                data: {"api_key": "a338932a06b8f07fb4c5638b91007531"},
+                success: function (response) {
+                    console.log(response)
+                    let movies = response["results"]
+                    let moviesLength = movies.length;
+
+                    for (let index = 0; index < moviesLength; index++) {
+                        let id = movies[index]['id'];
+                        let title = movies[index]['title'];
+                        let poster_path = movies[index]['poster_path']
+                        let poster_url = "https://image.tmdb.org/t/p/w300/"
+                        let base_url = "https://www.themoviedb.org/movie/"
+
+                        let movieCard = `<div class="card">
+                                                        <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
+                                                        <div class="card-body text-center">
+                                                        <a href="${base_url}${id}" target="_blank" class="link-font">${title}</a>
+                                                        </div>
+                                                    </div>`;
+                        $("#cards-box").append(movieCard);
+                    }
+                }
+            });
+        }
+
+    </script>
+</head>
+<body class="background">
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#"><font class="site-title-font">Calcifer</font></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickHome()">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickRate()">star</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickGenre()">rank</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickMypage()">My page</a>
+        </li>
+      </ul>
+        <nav class="navbar navbar-dark">
+          <form class="form-inline">
+            <a class="btn btn-outline-danger" role="button" href="#" onclick="onClickSearch()">Search</a>
+          </form>
+        </nav>
+        <nav class="navbar navbar-dark">
+          <form class="form-inline">
+            <a class="btn btn-outline-light" role="button" onclick="onClickBtnLogOut()">Logout</a>
+          </form>
+        </nav>
+    </div>
+  </nav>
+</header>
+
+<div class="wrap">
+    <form class="form-inline">
+  <div class="form-group mb-2">
+    <label for="staticEmail2" class="sr-only">Movie</label>
+    <input type="text" readonly class="form-control-plaintext" value="Movie">
+  </div>
+  <div class="form-group mx-sm-3 mb-2">
+    <input type="text" class="form-control" id="search_input" placeholder="Search" onkeyup="searchMovie()">
+  </div>
+  <button type="submit" class="btn btn-danger mb-2" onclick="searchMovie()">
+      <font size="5px">😎</font>
+  </button>
+</form>
+    <div class="card-columns" id="cards-box">
+
+    </div>
+</div>
+
+</body>
+</html>

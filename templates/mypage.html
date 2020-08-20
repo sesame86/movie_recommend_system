@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+
+
+    <title>Calcifer</title>
+
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .site-title-font{
+            color: red;
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 27px;
+        }
+        .size{
+            width: auto;
+            height: 800px;
+        }
+        .wrap {
+            width: auto;
+            margin: 30px;
+        }
+        .background{
+            background-color:black;
+        }
+
+
+
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            // 창을 새로고침할 때마다 실행할 함수를 여기에 입력합니다.
+            showImage();
+            showMovieRank();
+            currentRunningMovie();
+
+        });
+        function onClickBtnLogOut() {
+            $.ajax({
+                url: '/logout',
+                method: 'POST',
+                data: {},
+                success: function (response) {
+                    $(location).attr('href', '/');
+                }
+            })
+        }
+        function onClickHome() {
+            $(location).attr('href', '/');
+        }
+        function onClickRate() {
+            $(location).attr('href', '/rating');
+        }
+        function onClickGenre() {
+            $(location).attr('href', '/genre');
+        }
+        function onClickSearch() {
+            $(location).attr('href', '/search');
+        }
+        function onClickMypage() {
+            $(location).attr('href', '/mypage');
+        }
+    </script>
+</head>
+<body class="background">
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#"><font class="site-title-font">Calcifer</font></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickHome()">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickRate()">star</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickGenre()">rank</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#" onclick="onClickMypage()">My page</a>
+        </li>
+      </ul>
+        <nav class="navbar navbar-dark">
+          <form class="form-inline">
+            <a class="btn btn-outline-danger" role="button" href="#" onclick="onClickSearch()">Search</a>
+          </form>
+        </nav>
+        <nav class="navbar navbar-dark">
+          <form class="form-inline">
+            <a class="btn btn-outline-light" role="button" onclick="onClickBtnLogOut()">Logout</a>
+          </form>
+        </nav>
+    </div>
+  </nav>
+</header>
+
+
+
+
+
+</body>
+</html>

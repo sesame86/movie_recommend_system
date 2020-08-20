@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+
+
+    <title>Calcifer</title>
+
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .site-title-font{
+            color: red;
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 27px;
+        }
+        .size{
+            width: auto;
+            height: 800px;
+        }
+        .wrap {
+            width: auto;
+            margin: 30px;
+        }
+        .background{
+            background-color:black;
+        }
+        .ranking-font{
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 30px;
+            color:white;
+            margin: 10px;
+        }
+        .movietitle-font{
+            color: white;
+        }
+
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            // 창을 새로고침할 때마다 실행할 함수를 여기에 입력합니다.
+            showImage();
+            showMovieRank();
+            currentRunningMovie();
+
+        });
+        function onClickBtnLogOut() {
+            $.ajax({
+                url: '/logout',
+                method: 'POST',
+                data: {},
+                success: function (response) {
+                    $(location).attr('href', '/');
+                }
+            })
+        }
+        function onClickHome() {
+            $(location).attr('href', '/');
+        }
+        function onClickRate() {
+            $(location).attr('href', '/rating');
+        }
+        function onClickGenre() {
+            $(location).attr('href', '/genre');
+        }
+        function onClickSearch() {
+            $(location).attr('href', '/search');
+        }
+        function onClickMypage() {
+            $(location).attr('href', '/mypage');
+        }
+        function showImage() {
+            $.ajax({
+                    type: 'GET',
+                    url: 'https://api.themoviedb.org/3/movie/popular?api_key=a338932a06b8f07fb4c5638b91007531&language=en-US&page=1',
+                    data: {"api_key": "a338932a06b8f07fb4c5638b91007531"},
+                    success: function (response) {
+                        //console.log(response)
+                        let movies = response["results"]
+                        let moviesLength = movies.length;
+
+                        for (let index = 0; index < 1; index++) {
+                            let id = movies[index]['id'];
+                            let title = movies[index]['title'];
+                            let backdrop_path = movies[index]['backdrop_path']
+                            let base_url = "https://image.tmdb.org/t/p/w300/"
+
+
+                            let image = `<img src="${base_url}${backdrop_path}" class="d-block w-100" alt="...">`;
+                            $("#showimage01").append(image);
+                        }
+                        for (let index = 1; index < 2; index++) {
+                            let id = movies[index]['id'];
+                            let title = movies[index]['title'];
+                            let backdrop_path = movies[index]['backdrop_path']
+                            let base_url = "https://image.tmdb.org/t/p/w300/"
+
+
+                            let image = `<img src="${base_url}${backdrop_path}" class="d-block w-100" alt="...">`;
+                            $("#showimage02").append(image);
+                        }
+                        for (let index = 2; index < 3; index++) {
+                            let id = movies[index]['id'];
+                            let title = movies[index]['title'];
+                            let backdrop_path = movies[index]['backdrop_path']
+                            let poster_url = "https://image.tmdb.org/t/p/w300/"
+                            let base_url = "https://www.themoviedb.org/movie/"
+
+
+                            let image = `<img src="${poster_url}${backdrop_path}" class="d-block w-100" alt="...">`;
+                            $("#showimage03").append(image);
+                        }
+                    }
+                });
+            }
+
+            function showMovieRank() {
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://api.themoviedb.org/3/trending/movie/day?api_key=a338932a06b8f07fb4c5638b91007531&language=ko-KR',
+                    data: {"api_key": "a338932a06b8f07fb4c5638b91007531", "media_type":"movie", "time_window":"day"},
+                    success: function (response) {
+                        console.log(response)
+                        //if (response['result'] == 'success') {
+                        //let movies = response['msg'];
+                        let movies = response["results"]
+                        let moviesLength = movies.length;
+
+                        for (let index = 0; index < 12; index++) {
+                            let id = movies[index]['id'];
+                            let title = movies[index]['title'];
+                            let poster_path = movies[index]['poster_path']
+                            let poster_url = "https://image.tmdb.org/t/p/w300/"
+                            let base_url = "https://www.themoviedb.org/movie/"
+                            let rate = $('#star_count').val();
+
+                            let movieCard = `<div class="col-1">
+                                                <div class="card bg-dark">
+                                                        <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
+                                                    </div>
+                                                    <a href="${base_url}${id}" target="_blank" class="link-font"><font class="movietitle-font">${title}</font></a>
+                                                </div>`;
+                            $("#movie-rank").append(movieCard);
+                        }
+                    }
+                });
+            }
+
+            function currentRunningMovie() {
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://api.themoviedb.org/3/movie/now_playing?api_key=a338932a06b8f07fb4c5638b91007531&language=ko-KR&page=1/region=korea',
+                    data: {"api_key": "a338932a06b8f07fb4c5638b91007531", "region":"SK"},
+                    success: function (response) {
+                        console.log(response)
+                        //if (response['result'] == 'success') {
+                        //let movies = response['msg'];
+                        let movies = response["results"]
+                        let moviesLength = movies.length;
+
+                        for (let index = 0; index < 12; index++) {
+                            let id = movies[index]['id'];
+                            let title = movies[index]['title'];
+                            let poster_path = movies[index]['poster_path']
+                            let poster_url = "https://image.tmdb.org/t/p/w300/"
+                            let base_url = "https://www.themoviedb.org/movie/"
+                            let rate = $('#star_count').val();
+
+                            let movieCard = `<div class="col-1">
+                                                <div class="card bg-dark">
+                                                        <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
+                                                    </div>
+                                                    <a href="${base_url}${id}" target="_blank" class="link-font"><font class="movietitle-font">${title}</font></a>
+                                                </div>`;
+                            $("#current-movie").append(movieCard);
+                        }
+                    }
+                });
+            }
+
+        {#function showDayBoxoffice() {#}
+        {#    $('#day-rank').empty();#}
+        {##}
+        {#    Date.prototype.yyyymmdd = function() {#}
+        {#        var yyyy = this.getFullYear().toString();#}
+        {#        var mm = (this.getMonth() + 1).toString();#}
+        {#        var dd = this.getDate().toString();#}
+        {##}
+        {#        return yyyy + (mm[1] ? mm : '0'+mm[0]) + (dd[1] ? dd : '0'+dd[0]);}#}
+        {##}
+        {#        let yesterday = (new Date()).yyyymmdd()-1;#}
+        {#        console.log(yesterday);#}
+        {##}
+        {##}
+        {#    $.ajax({#}
+        {#        type: "GET",#}
+        {#        url: "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json",#}
+        {#        data: {key:"e1fca8d9b4be5d89b7b54e6818637eb3", targetDt: yesterday},#}
+        {#        success: function (response) {#}
+        {#            let dailyRank = response["boxOfficeResult"]["dailyBoxOfficeList"];#}
+        {#            for (let i = 0; i < dailyRank.length; i++) {#}
+        {#                let rank = dailyRank[i]['rank'];#}
+        {#                let movieNm = dailyRank[i]['movieNm'];#}
+        {#                let openDt = dailyRank[i]['openDt'];#}
+        {##}
+        {#                let dailylist = `<ul>${rank} ${movieNm} <font class="date-font-color">[${openDt}]</font></ul>`;#}
+        {#                let day =#}
+        {#                $('#day-rank').append(dailylist);#}
+        {#            }#}
+        {#            let day = `<font>[${yesterday}] 박스오피스</font>`;#}
+        {#            $('#day').append(day);#}
+        {#        }#}
+        {#    })#}
+        {#}#}
+
+    </script>
+</head>
+<body class="background">
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#"><font class="site-title-font">Calcifer</font></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#" onclick="onClickHome()">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickRate()">star</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickGenre()">rank</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickMypage()">My page</a>
+        </li>
+      </ul>
+        <nav class="navbar navbar-dark">
+          <form class="form-inline">
+            <a class="btn btn-outline-danger" role="button" href="#" onclick="onClickSearch()">Search</a>
+          </form>
+        </nav>
+        <nav class="navbar navbar-dark">
+          <form class="form-inline">
+            <a class="btn btn-outline-light" role="button" onclick="onClickBtnLogOut()">Logout</a>
+          </form>
+        </nav>
+    </div>
+  </nav>
+</header>
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner size">
+      <div class="carousel-item active" id="showimage01">
+
+      </div>
+      <div class="carousel-item" id="showimage02">
+
+      </div>
+      <div class="carousel-item" id="showimage03">
+
+      </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+    <div class="ranking-font">영화 인기 순위</div>
+    <div class="wrap">
+        <div class="row" id="movie-rank">
+
+        </div>
+    </div>
+    <div class="ranking-font">현재 상영 영화</div>
+    <div class="wrap">
+        <div class="row" id="current-movie">
+
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>

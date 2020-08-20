@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="{{url_for('static', filename='login.css')}}" rel="stylesheet" id="login-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <style>
+        .background{
+            background-image: url("https://s3-us-west-2.amazonaws.com/flx-editorial-wordpress/wp-content/uploads/2019/07/13224158/RT_300EssentialMovies_600x314.jpg");
+        }
+    </style>
+</head>
+<body class="background">
+
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+
+    <!-- Icon -->
+    <div class="fadeIn first">
+      <img src="https://images-na.ssl-images-amazon.com/images/I/41qYPBWPZfL._AC_SX425_.jpg" id="icon" alt="User Icon" />
+    </div>
+
+    <!-- Login Form -->
+    <form action="/signUp" method="POST">
+      <input type="text" id="userID" class="fadeIn second" name="userID" placeholder="ID">
+      <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
+        <input type="text" id="nickname" class="fadeIn third" name="nickname" placeholder="nickname">
+      <input type="submit" class="fadeIn fourth" value="Sign Up">
+    </form>
+
+
+  </div>
+</div>
+</body>
+</html>

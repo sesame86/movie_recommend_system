@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+
+    <title>Calcifer</title>
+
+    <!-- style -->
+    <style type="text/css">
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .site-title-font{
+            color: red;
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 27px;
+        }
+        .link-font{
+            font-size: 18px;
+            color:black;
+        }
+        .background{
+            background: black;
+        }
+        .wrap {
+            width: 900px;
+            margin: auto;
+        }
+        .starR1{
+            background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat -52px 0;
+            background-size: auto 100%;
+            width: 15px;
+            height: 30px;
+            float:left;
+            text-indent: -9999px;
+            cursor: pointer;
+        }
+        .starR2{
+            background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat right 0;
+            background-size: auto 100%;
+            width: 15px;
+            height: 30px;
+            float:left;
+            text-indent: -9999px;
+            cursor: pointer;
+        }
+        .starR1.on{background-position:0 0;}
+        .starR2.on{background-position:-15px 0;}
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            showMovie();
+            });
+        function onClickBtnLogOut() {
+            $.ajax({
+                url: '/logout',
+                method: 'POST',
+                data: {},
+                success: function (response) {
+                    $(location).attr('href', '/');
+                }
+            })
+        }
+        function onClickHome() {
+            $(location).attr('href', '/');
+        }
+        function onClickRate() {
+            $(location).attr('href', '/rating');
+        }
+        function onClickGenre() {
+            $(location).attr('href', '/genre');
+        }
+        function onClickSearch() {
+            $(location).attr('href', '/search');
+        }
+        function onClickMypage() {
+            $(location).attr('href', '/mypage');
+        }
+        function showMovie(page) {
+            let popular_movie_page;
+            for (popular_movie_page = 1; popular_movie_page < 20; popular_movie_page++) {
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://api.themoviedb.org/3/movie/popular?api_key=a338932a06b8f07fb4c5638b91007531&language=ko-KR&page=1',
+                    data: {"api_key": "a338932a06b8f07fb4c5638b91007531", "page": popular_movie_page},
+                    success: function (response) {
+                        //console.log(response)
+                        //if (response['result'] == 'success') {
+                        //let movies = response['msg'];
+                        let movies = response["results"]
+                        let moviesLength = movies.length;
+
+                        for (let index = 0; index < moviesLength; index++) {
+                            //let popularity = movies[index]['popularity'];
+                            //let vote_count = movies[index]['vote_count'];
+                            //let vote_average = movies[index]['vote_average'];
+                            let id = movies[index]['id'];
+                            let title = movies[index]['title'];
+                            let poster_path = movies[index]['poster_path']
+                            let poster_url = "https://image.tmdb.org/t/p/w300/"
+                            let base_url = "https://www.themoviedb.org/movie/"
+
+                            let movieCard = `<div class="card">
+                                                        <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
+                                                        <div class="card-body text-center">
+                                                        <a href="${base_url}${id}" target="_blank" class="link-font">${title}</a>
+                                                            <div class="starRev">
+                                                              <span class="starR1" id="star1" value="0.5" onclick="rate_give(${id}, $(this).text())">0.5</span>
+                                                              <span class="starR2" id="star2" value="1.0" onclick="rate_give(${id}, $(this).text())">1.0</span>
+                                                              <span class="starR1" id="star3" value="1.5" onclick="rate_give(${id}, $(this).text())">1.5</span>
+                                                              <span class="starR2" id="star4" value="2.0" onclick="rate_give(${id}, $(this).text())">2.0</span>
+                                                              <span class="starR1" id="star5" value="2.5" onclick="rate_give(${id}, $(this).text())">2.5</span>
+                                                              <span class="starR2" id="star6" value="3.0" onclick="rate_give(${id}, $(this).text())">3.0</span>
+                                                              <span class="starR1" id="star7" value="3.5" onclick="rate_give(${id}, $(this).text())">3.5</span>
+                                                              <span class="starR2" id="star8" value="4.0" onclick="rate_give(${id}, $(this).text())">4.0</span>
+                                                              <span class="starR1" id="star9" value="4.5" onclick="rate_give(${id}, $(this).text())">4.5</span>
+                                                              <span class="starR2" id="star10" value="5.0" onclick="rate_give(${id}, $(this).text())">5.0</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>`;
+                            $("#cards-box").append(movieCard);
+                            $('.starRev span').click(function () {
+                                $(this).parent().children('span').removeClass('on');
+                                $(this).addClass('on').prevAll('span').addClass('on');
+                                return false;
+                            });
+                        }
+                    }
+                });
+            }
+        }
+        function rate_give(id, value) {
+            alert('ID = ' + id +' rate = '+ value);
+            $.ajax({
+                type: "POST",
+                url: "/rating",
+                data: {rate_give: value, movieid_give: id},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert(response["msg"]);
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
+
+    </script>
+
+</head>
+
+<body class="background">
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#"><font class="site-title-font">Calcifer</font></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickHome()">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#" onclick="onClickRate()">star</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickGenre()">rank</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickMypage()">My page</a>
+        </li>
+      </ul>
+        <nav class="navbar navbar-dark">
+          <form class="form-inline">
+            <a class="btn btn-outline-danger" role="button" href="#" onclick="onClickSearch()">Search</a>
+          </form>
+        </nav>
+        <nav class="navbar navbar-dark">
+          <form class="form-inline">
+            <a class="btn btn-outline-light" role="button" onclick="onClickBtnLogOut()">Logout</a>
+          </form>
+        </nav>
+    </div>
+  </nav>
+</header>
+<div class="wrap">
+    <div class="card-columns" id="cards-box">
+
+    </div>
+</div>
+</body>
+
+</html>
