@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Required meta tags -->
+    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -15,8 +15,8 @@
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
 
     <!-- 구글폰트 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
@@ -30,23 +30,26 @@
         * {
             font-family: 'Noto Sans KR', sans-serif;
         }
-        .site-title-font{
+
+        .site-title-font {
             color: red;
             font-family: 'Gloria Hallelujah', cursive;
             font-size: 27px;
         }
-        .size{
+
+        .size {
             width: auto;
             height: 800px;
         }
+
         .wrap {
             width: auto;
             margin: 30px;
         }
-        .background{
-            background-color:black;
-        }
 
+        .background {
+            background-color: black;
+        }
 
 
     </style>
@@ -55,6 +58,7 @@
         $(document).ready(function () {
 
         });
+
         function onClickBtnLogOut() {
             $.ajax({
                 url: '/logout',
@@ -65,65 +69,99 @@
                 }
             })
         }
+
         function onClickHome() {
             $(location).attr('href', '/');
         }
+
         function onClickRate() {
             $(location).attr('href', '/rating');
         }
+
         function onClickGenre() {
             $(location).attr('href', '/genre');
         }
+
         function onClickSearch() {
             $(location).attr('href', '/search');
         }
+
         function onClickMypage() {
             $(location).attr('href', '/mypage');
         }
 
+        function getMovieInfo() {
+            $.ajax({
+                url: '',
+                method: '',
+                data: {},
+                success: function(response) {
+                    var result = response.data;
+                    let movieLikeCountArray = [];
+                    let movieGenreArray = [];
+                    for(let index = 0; index < result.length; index++) {
+                        movieData = result[index];
+                        movieLikeCount = movieData['like'];
+                        movieGenre = movieData['genre'];
+                        movieLikeCountArray.push(movieLikeCount);
+                        movieGenreArray.push(movieGenre);
 
+                    }
+                    data = {// 라벨의 이름이 툴팁처럼 마우스가 근처에 오면 나타남
+                        datasets: [{backgroundColor: ['red', 'yellow', 'blue'], data: movieLikeCountArray}],
+                        labels: movieGenreArray
+                        };
+                        // 가운데 구멍이 없는 파이형 차트
+                        var ctx1 = document.getElementById("myChart1");
+                        var myPieChart = new Chart(ctx1, {type: 'pie', data: data, options: {}});
+                        // 도넛형 차트
+                        var ctx2 = document.getElementById("myChart2");
+                        var myDoughnutChart = new Chart(ctx2, {type: 'doughnut', data: data, options: {}});
+                            }
+            });
+
+
+        }
 
 
     </script>
 </head>
 <body class="background">
 <header>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="#"><font class="site-title-font">Calcifer</font></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="onClickHome()">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="onClickRate()">star</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="onClickGenre()">rank</a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="#" onclick="onClickMypage()">My page</a>
-        </li>
-      </ul>
-        <nav class="navbar navbar-dark">
-          <form class="form-inline">
-            <a class="btn btn-outline-danger" role="button" href="#" onclick="onClickSearch()">Search</a>
-          </form>
-        </nav>
-        <nav class="navbar navbar-dark">
-          <form class="form-inline">
-            <a class="btn btn-outline-light" role="button" onclick="onClickBtnLogOut()">Logout</a>
-          </form>
-        </nav>
-    </div>
-  </nav>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="#"><font class="site-title-font">Calcifer</font></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="onClickHome()">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="onClickRate()">star</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="onClickGenre()">rank</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#" onclick="onClickMypage()">My page</a>
+                </li>
+            </ul>
+            <nav class="navbar navbar-dark">
+                <form class="form-inline">
+                    <a class="btn btn-outline-danger" role="button" href="#" onclick="onClickSearch()">Search</a>
+                </form>
+            </nav>
+            <nav class="navbar navbar-dark">
+                <form class="form-inline">
+                    <a class="btn btn-outline-light" role="button" onclick="onClickBtnLogOut()">Logout</a>
+                </form>
+            </nav>
+        </div>
+    </nav>
 </header>
-
-
-
 
 
 </body>

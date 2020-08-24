@@ -125,7 +125,33 @@ def create_movie():
     # reviews에 review 저장하기
     db.Mymovie_list.insert_one(Mymovie_list)
     # 성공 여부 & 성공 메시지 반환
-    return
+    return jsonify({'result': 'success'})
+
+# @app.route('/myGenre', methods=['POST'])
+# def save_genre():
+#     genre_receive = request.form['genre_give']
+#
+#     # DB에 삽입할 rating 만들기
+#     MyGenre_list = {
+#         'genre':genre_receive,
+#         'like':0
+#     }
+#     # reviews에 review 저장하기
+#     db.MyGenre_list.insert_one(MyGenre_list)
+#     # 성공 여부 & 성공 메시지 반환
+#     return jsonify({'result': 'success'})
+
+@app.route('/countGenre', methods=['POST'])
+def count_genre():
+    genre_receive = request.form['genre_give']
+
+    genre = db.MyGenre_list.find_one({'genre': genre_receive})
+
+    new_like = genre['like'] + 1
+
+    db.MyGenre_list.update_one({'genre': genre_receive}, {'$set': {'like': new_like}})
+
+    return jsonify({'result': 'success'})
 
 
 @app.route('/search', methods=['GET'])
