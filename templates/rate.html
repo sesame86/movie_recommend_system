@@ -151,11 +151,48 @@
             }
         }
         function rate_give(id, value) {
-            alert('ID = ' + id +' rate = '+ value);
+            //alert('ID = ' + id +' rate = '+ value);
             $.ajax({
                 type: "POST",
                 url: "/rating",
                 data: {rate_give: value, movieid_give: id},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        getMovieDetail(id);
+                        alert(response["msg"]);
+
+                    }
+                }
+            });
+        }
+
+            function getMovieDetail(movieid) {
+            //console.log(movieid)
+                $.ajax({
+                    type:"GET",
+                    url: "https://api.themoviedb.org/3/movie/"+movieid,
+                    data: {'api_key':'a338932a06b8f07fb4c5638b91007531','language':'ko-KR'},
+                    success: function (response) {
+                        //console.log(response)
+                        let movies = response;
+                        //console.log(movies)
+
+                        let movieid = movies['id'];
+                        let title = movies['title'];
+                        let genre = movies['genres'][0]['name'];
+                        let overview = movies['overview'];
+                        let nation = movies['production_countries'][0]['name'];
+
+                        give_movie_detail(movieid,title,genre,overview,nation);
+
+                    }
+                })
+            }
+            function give_movie_detail(movieid,title,genre,overview,nation) {
+            $.ajax({
+                type: "POST",
+                url: "/mymovie",
+                data: {movieid_give: movieid, title_give: title, genre_give: genre, overview_give:overview, nation_give:nation},
                 success: function (response) {
                     if (response["result"] == "success") {
                         alert(response["msg"]);

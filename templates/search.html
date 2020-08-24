@@ -91,7 +91,7 @@
         function searchMovie(search_input) {
             $('#cards-box').empty()
             let movietitle = $('#search_input').val();
-            console.log(movietitle);
+            //console.log(movietitle);
             $.ajax({
                 type: 'GET',
                 url: 'https://api.themoviedb.org/3/search/movie?api_key=a338932a06b8f07fb4c5638b91007531&language=ko-KR&query='+movietitle,

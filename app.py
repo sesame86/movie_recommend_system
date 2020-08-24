@@ -77,6 +77,7 @@ def rate_page():
 
 @app.route('/rating', methods=['POST'])
 def give_rate():
+    userid_recive = session['sessionID']
     # rate_receive 클라이언트가 준 rate 가져오기
     rate_receive = request.form['rate_give']
     # movieid_receive 클라이언트가 준 movieid 가져오기
@@ -84,9 +85,9 @@ def give_rate():
 
     # DB에 삽입할 rating 만들기
     rate = {
+        'userid':userid_recive,
         'rate': rate_receive,
         'movieid': movieid_receive
-        #,'userid'
     }
     # reviews에 review 저장하기
     db.rate.insert_one(rate)
@@ -100,6 +101,32 @@ def genre_page():
 @app.route('/mypage', methods=['GET'])
 def my_page():
     return render_template('mypage.html')
+
+
+@app.route('/mymovie', methods=['POST'])
+def create_movie():
+    userid_recive = session['sessionID']
+
+    movieid_recieve = request.form['movieid_give']
+    title_receive = request.form['title_give']
+    genre_receive = request.form['genre_give']
+    overview_receive = request.form['overview_give']
+    nation_receive = request.form['nation_give']
+
+    # DB에 삽입할 rating 만들기
+    Mymovie_list = {
+        'userid':userid_recive,
+        'movieid':movieid_recieve,
+        'title':title_receive,
+        'genre':genre_receive,
+        'overview':overview_receive,
+        'nation':nation_receive
+    }
+    # reviews에 review 저장하기
+    db.Mymovie_list.insert_one(Mymovie_list)
+    # 성공 여부 & 성공 메시지 반환
+    return
+
 
 @app.route('/search', methods=['GET'])
 def search_page():
