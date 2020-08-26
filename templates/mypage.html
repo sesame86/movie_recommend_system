@@ -4,10 +4,16 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- 부트스트랩 -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -21,10 +27,14 @@
     <!-- 구글폰트 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
 
+    <title>Movie Delivery</title>
 
-    <title>Calcifer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- 차트 링크 -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
     <style>
         * {
@@ -33,18 +43,32 @@
 
         .site-title-font {
             color: red;
-            font-family: 'Gloria Hallelujah', cursive;
+            font-family: 'Srisakdi', cursive;
             font-size: 27px;
         }
-
+        .navbar-background{
+            background-color: black;
+            opacity: 80%;
+        }
+        .jumbotron-style{
+            border-radius: 15px;
+            font-family: 'Gamja Flower', cursive;
+            background-color: lightgoldenrodyellow;
+            padding: 30px;
+        }
+        .jumbo-font{
+            font-family: 'Gamja Flower', cursive;
+            font-size: 30px;
+        }
         .size {
             width: auto;
             height: 800px;
         }
 
         .wrap {
-            width: auto;
-            margin: 30px;
+            width: 1100px;
+            margin: auto;
+            margin-top: 50px;
         }
 
         .background {
@@ -56,7 +80,9 @@
 
     <script>
         $(document).ready(function () {
-
+            countGenre();
+            countRate();
+            countNation();
         });
 
         function onClickBtnLogOut() {
@@ -90,46 +116,13 @@
             $(location).attr('href', '/mypage');
         }
 
-        function getMovieInfo() {
-            $.ajax({
-                url: '',
-                method: '',
-                data: {},
-                success: function(response) {
-                    var result = response.data;
-                    let movieLikeCountArray = [];
-                    let movieGenreArray = [];
-                    for(let index = 0; index < result.length; index++) {
-                        movieData = result[index];
-                        movieLikeCount = movieData['like'];
-                        movieGenre = movieData['genre'];
-                        movieLikeCountArray.push(movieLikeCount);
-                        movieGenreArray.push(movieGenre);
-
-                    }
-                    data = {// 라벨의 이름이 툴팁처럼 마우스가 근처에 오면 나타남
-                        datasets: [{backgroundColor: ['red', 'yellow', 'blue'], data: movieLikeCountArray}],
-                        labels: movieGenreArray
-                        };
-                        // 가운데 구멍이 없는 파이형 차트
-                        var ctx1 = document.getElementById("myChart1");
-                        var myPieChart = new Chart(ctx1, {type: 'pie', data: data, options: {}});
-                        // 도넛형 차트
-                        var ctx2 = document.getElementById("myChart2");
-                        var myDoughnutChart = new Chart(ctx2, {type: 'doughnut', data: data, options: {}});
-                            }
-            });
-
-
-        }
-
-
     </script>
 </head>
+
 <body class="background">
 <header>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="#"><font class="site-title-font">Calcifer</font></a>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top navbar-background">
+        <a class="navbar-brand" href="#" onclick="onClickHome()"><font class="site-title-font">Movie<font style="font-size: 12px" class="site-title-font">Delivery</font></font></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -162,7 +155,202 @@
         </div>
     </nav>
 </header>
+    <div class="container wrap">
+        <div class="jumbotron jumbotron-style">
+            <h1 class="display-4">🧐당신의 취향을 반영한 결과를 보여드릴게요</h1>
+            <p class="lead"><font class="jumbo-font">이용해 주셔서 감사합니다🐹</font></p>
+        </div>
+            <div class="row my-2">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="myChart1"></canvas>
+                        </div>
+                        <div class="card-footer text-center bg-dark text-light">
+                            <h3>영화 선호장르</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="myChart2"></canvas>
+                        </div>
+                        <div class="card card-body text-center bg-dark text-light">
+                            <h3>별점 분포</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="myChart3"></canvas>
+                        </div>
+                        <div class="card card-body text-center bg-dark text-light">
+                            <h3>영화 선호 국가</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <!-- 차트 -->
+    <script>
+        function countGenre() {
+                 $.ajax({
+                type: "GET",
+                url: "/countGenre",
+                data: {},
+                success: function (response) {
+                    let result = response['genre_list'];
+                    //console.log(result)
+                    let resultLength = result.length;
+                    let movieLikeCountArray = [];
+                    let movieGenreArray = [];
+                    for (let index = 0; index < resultLength; index++) {
+                        let genreData = result[index];
+                        let genreLikeCount = genreData['like'];
+                        let genre = genreData['genre'];
+                        movieLikeCountArray.push(genreLikeCount);
+                        movieGenreArray.push(genre);
 
+                    }
+                    data = {
+                        datasets: [{
+                            backgroundColor: ['#F3D1DC', '#FCF0CF', '#B16E4B', '#97F2F3', '#ECAD8F', '#FDCF76', '#D7E7A9',
+                                              '#E18D96','#909090','#B5DDD1','#9DABDD','#BC85A3','#8AC0DE','#E17E76',
+                                              '#A02C2D','#E8CCC0','#D3C0F9','#F99A9C','#E7E7E7'],
+                            data: movieLikeCountArray
+                        }],
+                        // 라벨의 이름이 툴팁처럼 마우스가 근처에 오면 나타남
+                        labels: movieGenreArray
+                    };
+                    var donutOptions = { cutoutPercentage: 30, //도넛두께 : 값이 클수록 얇아짐
+                        legend: {position:'bottom',
+                            padding:5,
+                            labels: {
+                            pointStyle:'circle',
+                                usePointStyle:true}} };
+
+                    // 도넛형 차트
+                    var ctx1 = document.getElementById("myChart1");
+                    var myDoughnutChart = new Chart(ctx1, {
+                        type: 'doughnut',
+                        data: data,
+                        options: donutOptions
+                    });
+                }
+            });
+        }
+        function countRate() {
+            $.ajax({
+                type: "GET",
+                url: "/countRating",
+                data: {},
+                success: function (response) {
+                    let result = response['rate_list'];
+                    //console.log(result)
+                    key = Object.keys(result);
+                    value = Object.values(result);
+
+                    let resultLength = key.length;
+                    let rateScoreArray = [];
+                    let rateCountArray = [];
+
+                    for (let index = 0; index < resultLength; index++) {
+                        let rateScore = key[index];
+                        let rateCount = value[index];
+                        rateScoreArray.push(rateScore);
+                        rateCountArray.push(rateCount);
+                    }
+
+                    var ctx2 = document.getElementById('myChart2');
+                    var myChart2 = new Chart(ctx2, {
+                        type: 'bar',
+                        data: {
+                            labels: rateScoreArray,
+                            datasets: [{
+                                label: '# of Votes',
+                                data: rateCountArray,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        function countNation() {
+            $.ajax({
+                type: "GET",
+                url: "/countNation",
+                data: {},
+                success: function (response) {
+                    let result = response['nation_list'];
+                    //console.log(result)
+                    key = Object.keys(result);
+                    value = Object.values(result);
+
+                    let resultLength = key.length;
+                    let nationNameArray = [];
+                    let nationCountArray = [];
+
+                    for (let index = 0; index < resultLength; index++) {
+                        let nationScore = key[index];
+                        let nationCount = value[index];
+                        nationNameArray.push(nationScore);
+                        nationCountArray.push(nationCount);
+                    }
+                    data = {
+                        datasets: [{
+                            backgroundColor: ['#F3D1DC', '#FCF0CF', '#B16E4B', '#97F2F3', '#ECAD8F', '#FDCF76', '#D7E7A9',
+                                              '#E18D96','#909090','#B5DDD1','#9DABDD','#BC85A3','#8AC0DE','#E17E76',
+                                              '#A02C2D','#E8CCC0','#D3C0F9','#F99A9C','#E7E7E7'],
+                            data: nationCountArray
+                        }],
+                        // 라벨의 이름이 툴팁처럼 마우스가 근처에 오면 나타남
+                        labels: nationNameArray
+                    };
+                    var donutOptions = { cutoutPercentage: 30, //도넛두께 : 값이 클수록 얇아짐
+                        legend: {position:'bottom',
+                            padding:5,
+                            labels: {
+                            pointStyle:'circle',
+                                usePointStyle:true}} };
+
+                    // 도넛형 차트
+                    var ctx3 = document.getElementById("myChart3");
+                    var myDoughnutChart = new Chart(ctx3, {
+                        type: 'doughnut',
+                        data: data,
+                        options: donutOptions
+                    });
+                }
+            });
+        }
+
+    </script>
 
 </body>
 </html>

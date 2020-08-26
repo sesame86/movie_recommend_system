@@ -1,3 +1,5 @@
+import collections
+
 from bson import ObjectId
 from flask import Flask, render_template, request, session, redirect, jsonify
 from pymongo import MongoClient
@@ -153,6 +155,38 @@ def count_genre():
 
     return jsonify({'result': 'success'})
 
+
+@app.route('/countGenre', methods=['GET'])
+def genre_data():
+    genre = list(db.MyGenre_list.find({}, {'_id': False}))
+
+    return jsonify({'result': 'success', 'genre_list': genre})
+
+@app.route('/countRating', methods=['GET'])
+def count_rate():
+     rates = list(db.rate.find({}, {'_id': False, 'userid':False, 'movieid':False}))
+
+     rate_list = []
+
+     for i in rates:
+         for index, rate in i.items():
+             rate_list.append(rate)
+     rate_count = collections.Counter(rate_list)
+
+     return jsonify({'result': 'success', 'rate_list': rate_count})
+
+@app.route('/countNation', methods=['GET'])
+def count_nation():
+     nations = list(db.Mymovie_list.find({}, {'_id': False, 'userid':False, 'movieid':False, 'title':False, 'genre':False, 'overview':False}))
+
+     nation_list = []
+
+     for i in nations:
+         for index, nation in i.items():
+             nation_list.append(nation)
+     nation_count = collections.Counter(nation_list)
+
+     return jsonify({'result': 'success', 'nation_list': nation_count})
 
 @app.route('/search', methods=['GET'])
 def search_page():

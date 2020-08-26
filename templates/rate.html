@@ -21,19 +21,34 @@
 
     <!-- 구글폰트 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
 
-    <title>Calcifer</title>
+    <title>Movie delivery</title>
 
     <!-- style -->
     <style type="text/css">
         * {
             font-family: 'Noto Sans KR', sans-serif;
         }
-        .site-title-font{
+        .site-title-font {
             color: red;
-            font-family: 'Gloria Hallelujah', cursive;
+            font-family: 'Srisakdi', cursive;
             font-size: 27px;
+        }
+        .navbar-background{
+            background-color: black;
+            opacity: 80%;
+        }
+        .jumbotron-style{
+            border-radius: 15px;
+            font-family: 'Gamja Flower', cursive;
+            background-color: lightgoldenrodyellow;
+            padding: 30px;
+        }
+        .jumbo-font{
+            font-family: 'Gamja Flower', cursive;
+            font-size: 30px;
         }
         .link-font{
             font-size: 18px;
@@ -43,8 +58,9 @@
             background: black;
         }
         .wrap {
-            width: 900px;
+            width: 1100px;
             margin: auto;
+            margin-top: 50px;
         }
         .starR1{
             background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat -52px 0;
@@ -218,17 +234,18 @@
         {#        })#}
         {#    }#}
         {#    function save_genre(genre) {#}
-        {#    $.ajax({#}
-        {#        type: "POST",#}
-        {#        url: "/myGenre",#}
-        {#        data: {'genre_give':genre},#}
-        {#        success: function (response) {#}
-        {#            if (response["result"] == "success") {#}
-        {#                alert(response["msg"]);#}
-        {#                window.location.reload();#}
+        {#        $.ajax({#}
+        {#            type: "POST",#}
+        {#            url: "/myGenre",#}
+        {#            data: {'genre_give': genre},#}
+        {#            success: function (response) {#}
+        {#                if (response["result"] == "success") {#}
+        {#                    alert(response["msg"]);#}
+        {#                    window.location.reload();#}
+        {#                }#}
         {#            }#}
-        {#        }#}
-        {#    });#}
+        {#        });#}
+        {#    }#}
 
         function countGenre(genre){
             $.ajax({
@@ -250,10 +267,11 @@
 
 <body class="background">
 <header>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="#"><font class="site-title-font">Calcifer</font></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top navbar-background">
+        <a class="navbar-brand" href="#" onclick="onClickHome()"><font class="site-title-font">Movie<font style="font-size: 12px" class="site-title-font">Delivery</font></font></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
@@ -284,6 +302,10 @@
   </nav>
 </header>
 <div class="wrap">
+    <div class="jumbotron jumbotron-style">
+        <h1 class="display-4">🤔어떤 영화를 좋아하세요?</h1>
+        <p class="lead"><font class="jumbo-font">재밌게 봤던 영화에 별점을 남겨주세요🙂</font></p>
+    </div>
     <div class="card-columns" id="cards-box">
 
     </div>
