@@ -21,6 +21,46 @@
             size:300px;
         }
     </style>
+    <script>
+         $(document).ready(function () {
+
+            });
+        function signup() {
+                let userID = $('#userID').val();
+                let password = $('#password').val();
+                let nickname = $('#nickname').val();
+                console.log(userID)
+
+                if (!validateEmail(userID)) {
+                    alert('아이디를 입력해주세요')
+                    $('#userID').focus()
+                    return
+                } else if (password == '') {
+                    alert('비밀번호를 입력해주세요')
+                    $('#password').focus()
+                    return
+                } else if (nickname == '') {
+                    alert('닉네임을 입력해주세요')
+                    $('#nickname').focus()
+                    return
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/signUp",
+                    data: {userid_give: userID, password_give: password, nickname_give: nickname},
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            alert('회원가입 완료!');
+                            $(location).attr('href', '/login');
+                        }
+                    }
+                })
+            }
+            function validateEmail(elementValue){
+                let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                return emailPattern.test(elementValue);
+            }
+    </script>
 </head>
 <body class="background">
 
@@ -36,11 +76,11 @@
     </div>
 
     <!-- Login Form -->
-    <form action="/signUp" method="POST">
+    <form>
       <input type="text" id="userID" class="fadeIn second" name="userID" placeholder="ID">
       <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
         <input type="text" id="nickname" class="fadeIn third" name="nickname" placeholder="nickname">
-      <input type="submit" class="fadeIn fourth" value="Sign Up">
+      <input type="button" onclick="signup()" class="fadeIn fourth" value="Sign Up">
     </form>
 
 

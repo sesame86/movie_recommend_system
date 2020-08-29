@@ -60,12 +60,12 @@ def sign_up_page():
 
 @app.route('/signUp', methods=['POST'])
 def sign_up():
-    user_id = request.form['userID']
-    password = request.form['password']
-    nickname = request.form['nickname']
+    user_id = request.form['userid_give']
+    password = request.form['password_give']
+    nickname = request.form['nickname_give']
 
     db.user.insert_one({'user_id': user_id, 'password': password, 'nickname': nickname})
-    return render_template('login.html')
+    return jsonify({'result': 'success'})
 
 
 @app.route('/logout', methods=['POST'])

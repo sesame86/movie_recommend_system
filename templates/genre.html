@@ -65,6 +65,15 @@
 
     <script>
         $(document).ready(function () {
+            $('#selectgenre a').on('click', function() {
+                // 선택된 항목 값(value) 얻기
+                let selectgenrename = $(this).text();
+                let selectgenre = $(this).attr('value');
+                alert(selectgenrename+"를 고르셨어요")
+                movieGenre(selectgenre);
+                //getValue(selectgenre)
+
+            });
         });
         function onClickBtnLogOut() {
             $.ajax({
@@ -90,16 +99,6 @@
         }
         function onClickMypage() {
             $(location).attr('href', '/mypage');
-        }
-        function selectGenreValue() {
-            $('#selectgenre a').on('click', function() {
-                // 선택된 항목 값(value) 얻기
-                let selectgenrename = $(this).text();
-                let selectgenre = $(this).attr('value');
-                movieGenre(selectgenre);
-                //getValue(selectgenre)
-                alert(selectgenrename+"를 고르셨어요")
-            });
         }
         {#function selectNationValue() {#}
         {#    $('#selectnation a').on('click', function() {#}
@@ -238,7 +237,7 @@
       <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="sr-only">Toggle Dropdown</span>
       </button>
-      <div class="dropdown-menu" id="selectgenre" onclick="selectGenreValue()">
+      <div class="dropdown-menu" id="selectgenre">
         <a class="dropdown-item" href="#" value="28">액션</a>
         <a class="dropdown-item" href="#" value="12">모험</a>
         <a class="dropdown-item" href="#" value="16">애니메이션</a>
