@@ -66,7 +66,7 @@
         }
 
         .wrap {
-            width: 1100px;
+            width: 1300px;
             margin: auto;
             margin-top: 50px;
         }
@@ -74,7 +74,18 @@
         .background {
             background-color: black;
         }
-
+        body{
+            margin-top:20px;
+            background:#FAFAFA;
+        }
+        .card-size{
+            margin: 10px;
+            width: 200px;
+            height: auto;
+        }
+        .predict-title-font {
+            font-size: 10px;
+        }
 
     </style>
 
@@ -83,6 +94,7 @@
             countGenre();
             countRate();
             countNation();
+            recommendMovie();
         });
 
         function onClickBtnLogOut() {
@@ -116,6 +128,58 @@
             $(location).attr('href', '/mypage');
         }
 
+        function recommendMovie() {
+            $.ajax({
+                type: 'GET',
+                url: '/recommendMovie',
+                data: {},
+                success: function (response) {
+                    predict = response['predict_list']
+                    predictLength = predict.length;
+                    console.log(response)
+
+                    for (let index = 0; index < predictLength; index++){
+                        tmdbid = predict[index][0];
+                        predict_rate = predict[index][1];
+                        getMovieDetail(index, tmdbid, predict_rate);
+                    }
+                }
+            });
+        }
+        function getMovieDetail(index, tmdbid, predict_rate) {
+                $.ajax({
+                    type:"GET",
+                    url: "https://api.themoviedb.org/3/movie/"+tmdbid,
+                    data: {'api_key':'a338932a06b8f07fb4c5638b91007531','language':'ko-KR'},
+                    success: function (response) {
+                        //console.log(response)
+                        let movies = response;
+                        let moviesLength = movies.length;
+                        //console.log(movies)
+                        let tmdbid = movies['id'];
+                        let title = movies['title'];
+                        let genre = movies['genres'][0]['name'];
+                        let overview = movies['overview'];
+                        let nation = movies['production_countries'][0]['name'];
+                        let release_date = movies['release_date'];
+                        let poster_path = movies['poster_path']
+                        let poster_url = "https://image.tmdb.org/t/p/w300/"
+                        let base_url = "https://www.themoviedb.org/movie/"
+
+                        console.log(title)
+                        let predict_list = `<div>
+                                                <div class="card bg-dark text-white card-size">
+                                                    <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
+                                                    <div class="card-img-overlay">
+                                                        <h5 class="card-title">[${index}]${title}</h5>
+                                                        <p class="card-text">${genre}</p>
+                                                        <p class="card-text">${predict_rate}</p>
+                                                    </div>
+                                                </div>`
+                        $("#predictList").append(predict_list);
+                    }
+                })
+            }
     </script>
 </head>
 
@@ -155,64 +219,73 @@
         </div>
     </nav>
 </header>
-    <div class="container wrap">
+    <div class="wrap">
         <div class="jumbotron jumbotron-style">
             <h1 class="display-4">🧐당신의 취향을 반영한 결과를 보여드릴게요</h1>
             <p class="lead"><font class="jumbo-font">이용해 주셔서 감사합니다🐹</font></p>
         </div>
-            <div class="row my-2">
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas id="myChart1"></canvas>
-                        </div>
-                        <div class="card-footer text-center bg-dark text-light">
-                            <h3>영화 선호장르</h3>
-                        </div>
+    <div class="row">
+        <div class="row my-2 col-md-8">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="myChart1"></canvas>
+                    </div>
+                    <div class="card-footer text-center bg-dark text-light">
+                        <h3>영화 선호장르</h3>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas id="myChart2"></canvas>
-                        </div>
-                        <div class="card card-body text-center bg-dark text-light">
-                            <h3>별점 분포</h3>
-                        </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="myChart2"></canvas>
+                    </div>
+                    <div class="card card-body text-center bg-dark text-light">
+                        <h3>별점 분포</h3>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas id="myChart3"></canvas>
-                        </div>
-                        <div class="card card-body text-center bg-dark text-light">
-                            <h3>영화 선호 국가</h3>
-                        </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="myChart3"></canvas>
+                    </div>
+                    <div class="card card-body text-center bg-dark text-light">
+                        <h3>영화 선호 국가</h3>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+        <div class="wrap">
+            <div class="row mb-5" id="predictList">
+
+            </div>
+        </div>
+
+
             <!-- 차트 -->
     <script>
         function countGenre() {
-                 $.ajax({
+            $.ajax({
                 type: "GET",
                 url: "/countGenre",
                 data: {},
                 success: function (response) {
                     let result = response['genre_list'];
                     //console.log(result)
-                    let resultLength = result.length;
+                    key = Object.keys(result);
+                    value = Object.values(result);
+
+                    let resultLength = key.length;
                     let movieLikeCountArray = [];
                     let movieGenreArray = [];
                     for (let index = 0; index < resultLength; index++) {
-                        let genreData = result[index];
-                        let genreLikeCount = genreData['like'];
-                        let genre = genreData['genre'];
+                        let genreData = key[index];
+                        let genreLikeCount = value[index];
                         movieLikeCountArray.push(genreLikeCount);
-                        movieGenreArray.push(genre);
-
+                        movieGenreArray.push(genreData);
                     }
                     data = {
                         datasets: [{

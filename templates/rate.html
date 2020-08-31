@@ -131,7 +131,7 @@
                             //let popularity = movies[index]['popularity'];
                             //let vote_count = movies[index]['vote_count'];
                             //let vote_average = movies[index]['vote_average'];
-                            let id = movies[index]['id'];
+                            let tmdbid = movies[index]['id'];
                             let title = movies[index]['title'];
                             let poster_path = movies[index]['poster_path']
                             let poster_url = "https://image.tmdb.org/t/p/w300/"
@@ -140,18 +140,18 @@
                             let movieCard = `<div class="card">
                                                         <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
                                                         <div class="card-body text-center">
-                                                        <a href="${base_url}${id}" target="_blank" class="link-font">${title}</a>
+                                                        <a href="${base_url}${tmdbid}" target="_blank" class="link-font">${title}</a>
                                                             <div class="starRev">
-                                                              <span class="starR1" id="star1" value="0.5" onclick="rate_give(${id}, $(this).text())">0.5</span>
-                                                              <span class="starR2" id="star2" value="1.0" onclick="rate_give(${id}, $(this).text())">1.0</span>
-                                                              <span class="starR1" id="star3" value="1.5" onclick="rate_give(${id}, $(this).text())">1.5</span>
-                                                              <span class="starR2" id="star4" value="2.0" onclick="rate_give(${id}, $(this).text())">2.0</span>
-                                                              <span class="starR1" id="star5" value="2.5" onclick="rate_give(${id}, $(this).text())">2.5</span>
-                                                              <span class="starR2" id="star6" value="3.0" onclick="rate_give(${id}, $(this).text())">3.0</span>
-                                                              <span class="starR1" id="star7" value="3.5" onclick="rate_give(${id}, $(this).text())">3.5</span>
-                                                              <span class="starR2" id="star8" value="4.0" onclick="rate_give(${id}, $(this).text())">4.0</span>
-                                                              <span class="starR1" id="star9" value="4.5" onclick="rate_give(${id}, $(this).text())">4.5</span>
-                                                              <span class="starR2" id="star10" value="5.0" onclick="rate_give(${id}, $(this).text())">5.0</span>
+                                                              <span class="starR1" id="star1" value="0.5" onclick="rate_give(${tmdbid}, $(this).text())">0.5</span>
+                                                              <span class="starR2" id="star2" value="1.0" onclick="rate_give(${tmdbid}, $(this).text())">1.0</span>
+                                                              <span class="starR1" id="star3" value="1.5" onclick="rate_give(${tmdbid}, $(this).text())">1.5</span>
+                                                              <span class="starR2" id="star4" value="2.0" onclick="rate_give(${tmdbid}, $(this).text())">2.0</span>
+                                                              <span class="starR1" id="star5" value="2.5" onclick="rate_give(${tmdbid}, $(this).text())">2.5</span>
+                                                              <span class="starR2" id="star6" value="3.0" onclick="rate_give(${tmdbid}, $(this).text())">3.0</span>
+                                                              <span class="starR1" id="star7" value="3.5" onclick="rate_give(${tmdbid}, $(this).text())">3.5</span>
+                                                              <span class="starR2" id="star8" value="4.0" onclick="rate_give(${tmdbid}, $(this).text())">4.0</span>
+                                                              <span class="starR1" id="star9" value="4.5" onclick="rate_give(${tmdbid}, $(this).text())">4.5</span>
+                                                              <span class="starR2" id="star10" value="5.0" onclick="rate_give(${tmdbid}, $(this).text())">5.0</span>
                                                             </div>
                                                         </div>
                                                     </div>`;
@@ -166,15 +166,15 @@
                 });
             }
         }
-        function rate_give(id, value) {
+        function rate_give(tmdbid, value) {
             //alert('ID = ' + id +' rate = '+ value);
             $.ajax({
                 type: "POST",
                 url: "/rating",
-                data: {rate_give: value, movieid_give: id},
+                data: {rate_give: value, tmdbid_give: tmdbid},
                 success: function (response) {
                     if (response["result"] == "success") {
-                        getMovieDetail(id);
+                        getMovieDetail(tmdbid);
                         alert(response["msg"]);
 
                     }
@@ -182,33 +182,33 @@
             });
         }
 
-            function getMovieDetail(movieid) {
-            //console.log(movieid)
+            function getMovieDetail(tmdbid) {
+            //console.log(tmdbid)
                 $.ajax({
                     type:"GET",
-                    url: "https://api.themoviedb.org/3/movie/"+movieid,
+                    url: "https://api.themoviedb.org/3/movie/"+tmdbid,
                     data: {'api_key':'a338932a06b8f07fb4c5638b91007531','language':'ko-KR'},
                     success: function (response) {
                         //console.log(response)
                         let movies = response;
                         //console.log(movies)
 
-                        let movieid = movies['id'];
+                        let tmdbid = movies['id'];
                         let title = movies['title'];
                         let genre = movies['genres'][0]['name'];
                         let overview = movies['overview'];
                         let nation = movies['production_countries'][0]['name'];
 
-                        give_movie_detail(movieid,title,genre,overview,nation);
+                        give_movie_detail(tmdbid,title,genre,overview,nation);
                         countGenre(genre);
                     }
                 })
             }
-            function give_movie_detail(movieid,title,genre,overview,nation) {
+            function give_movie_detail(tmdbid,title,genre,overview,nation) {
             $.ajax({
                 type: "POST",
                 url: "/mymovie",
-                data: {movieid_give: movieid, title_give: title, genre_give: genre, overview_give:overview, nation_give:nation},
+                data: {tmdbid_give: tmdbid, title_give: title, genre_give: genre, overview_give:overview, nation_give:nation},
                 success: function (response) {
                     if (response["result"] == "success") {
                         window.location.reload();
