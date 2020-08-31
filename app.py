@@ -14,7 +14,6 @@ app.secret_key = 'sparta'
 client = MongoClient('localhost', 27017)
 db = client.MovieDB
 
-
 @app.route('/')
 def check():
     # 세션에 'sessionID'라는 변수가 있는
@@ -47,6 +46,7 @@ def login():
     password = request.form['password']
 
     user = db.user.find_one({'user_id': user_id, 'password': password})
+
 
     if user is not None:
         # 세션을 생성하는데
@@ -294,4 +294,4 @@ def search_page():
     return render_template('search.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run('0.0.0.0', port=5000, debug=True)
