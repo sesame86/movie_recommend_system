@@ -69,6 +69,11 @@
         .date-font-color{
             color: gray;
         }
+        .card-size{
+            margin: 10px;
+            width: 200px;
+            height: auto;
+        }
 
     </style>
 
@@ -122,7 +127,7 @@
                         let poster_url = "https://image.tmdb.org/t/p/w300/"
                         let base_url = "https://www.themoviedb.org/movie/"
 
-                        let movieCard = `<div class="card">
+                        let movieCard = `<div class="card card-size">
                                                         <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
                                                         <div class="card-body text-center">
                                                         <a href="${base_url}${id}" target="_blank" class="link-font">${title}</a>
@@ -186,7 +191,7 @@
             <font size="5px">😎</font>
         </button>
     </form>
-    <div class="card-columns" id="cards-box">
+    <div class="row mb-5" id="cards-box">
 
     </div>
 </div>

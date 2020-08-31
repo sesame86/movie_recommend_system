@@ -210,7 +210,7 @@ def movie_recommend():
         return ret
 
     session_id = session['sessionID']
-    result = predictRating(session_id, nn=50, simFunc=distance_euclidean)
+    result = predictRating(1, nn=50, simFunc=distance_euclidean)
     predict = pd.DataFrame(result, columns=['tmdbid', 'predicted_rating'])
     predict = (predict.sort_values(['predicted_rating'], ascending=False)).values.tolist()
 
@@ -294,4 +294,4 @@ def search_page():
     return render_template('search.html')
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run()

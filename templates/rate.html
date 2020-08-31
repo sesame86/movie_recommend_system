@@ -82,6 +82,12 @@
         }
         .starR1.on{background-position:0 0;}
         .starR2.on{background-position:-15px 0;}
+
+        .card-size{
+            margin: 10px;
+            width: 200px;
+            height: auto;
+        }
     </style>
 
     <script>
@@ -137,7 +143,7 @@
                             let poster_url = "https://image.tmdb.org/t/p/w300/"
                             let base_url = "https://www.themoviedb.org/movie/"
 
-                            let movieCard = `<div class="card">
+                            let movieCard = `<div class="card card-size">
                                                         <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
                                                         <div class="card-body text-center">
                                                         <a href="${base_url}${tmdbid}" target="_blank" class="link-font">${title}</a>
@@ -306,7 +312,7 @@
         <h1 class="display-4">🤔어떤 영화를 좋아하세요?</h1>
         <p class="lead"><font class="jumbo-font">재밌게 봤던 영화에 별점을 남겨주세요🙂</font></p>
     </div>
-    <div class="card-columns" id="cards-box">
+    <div class="row mb-5" id="cards-box">
 
     </div>
 </div>
