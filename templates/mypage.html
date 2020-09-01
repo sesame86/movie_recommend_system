@@ -70,7 +70,11 @@
             margin: auto;
             margin-top: 50px;
         }
-
+        .list-wrap {
+            width: 1000px;
+            margin: auto;
+            margin-top: 50px;
+        }
         .background {
             background-color: black;
         }
@@ -167,15 +171,12 @@
                         let base_url = "https://www.themoviedb.org/movie/"
 
                         console.log(title)
-                        let predict_list = `<div>
-                                                <div class="card bg-dark text-white card-size">
-                                                    <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
-                                                    <div class="card-img-overlay">
-                                                        <h5 class="card-title">[${index}]${title}</h5>
-                                                        <p class="card-text">${genre}</p>
-                                                        <p class="card-text">${predict_rate}</p>
-                                                    </div>
-                                                </div>`
+                        let predict_list = `<tr>
+                                              <th scope="row">${index}</th>
+                                              <td>${title}</td>
+                                              <td>${predict_rate}</td>
+                                              <td>${release_date}</td>
+                                            </tr>`
                         $("#predictList").append(predict_list);
                     }
                 })
@@ -258,11 +259,19 @@
             </div>
         </div>
     </div>
-        <div class="wrap">
-            <div class="row mb-5" id="predictList">
+        <table class="table table-dark list-wrap">
+          <thead>
+            <tr>
+              <th scope="col">rank</th>
+              <th scope="col">title</th>
+              <th scope="col">predict rate</th>
+              <th scope="col">release date</th>
+            </tr>
+          </thead>
+          <tbody id="predictList">
 
-            </div>
-        </div>
+          </tbody>
+        </table>
 
 
             <!-- 차트 -->

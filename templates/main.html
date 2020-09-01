@@ -4,8 +4,8 @@
   <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link href="{{url_for('static', filename='card.css')}}" rel="stylesheet" id="card-css">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -66,122 +66,32 @@
             color: black;
             font-family: 'Do Hyeon', sans-serif;
         }
-        .stop-scrolling {
-            /* height: 100%; */
-            overflow: hidden;
-        }
-        h1 {width: 360px; margin: 0 auto; text-align: center;
-            color: blueviolet;
+        .carousel-caption {
+            position: absolute;
+            right: 15%;
+            bottom: 40%;
+            left: 15%;
+            z-index: 10;
             padding-top: 20px;
-        }
-        .subsubject {
+            padding-bottom: 20px;
+            color: #fff;
             text-align: center;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
         }
-        p{padding: 8px 0px;}
-        .container{
-            display: flex;
-            flex-flow: row wrap;
-            justify-items: center;
-            justify-content: center;
-        }
-
-        .container > div{
-            flex-basis:  25%;
-            flex : 0;
-            margin: 8px;
-            border:1px solid rgb(252, 252, 252);
-            padding: 8px;
-            cursor: pointer;
-            box-sizing: border-box;
-
-        }
-        .container > div:hover {
-            border:1px solid rebeccapurple;
-        }
-        .buttonWrapper{
-            width: 100vs;
-            text-align: center;
-        }
-        .more{
-            width: 120px;
-            padding: 8px 15px;
-            margin: 10px auto;
-        }
-
-        /* 오버레이 설정 */
-        #overlay{
-            position: fixed;
-            top:0; left:0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 999;
-            /* 시작시 보이지 않게 처리 */
-            visibility: hidden;
-            opacity: 0;
-            transition: all 0.5s;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* 오버레이를 보여 줄때 사용 */
-        #overlay.show {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .close {
-            position:absolute;
-            top:10px; right: 10px;
-            width: 36px;
-            margin:0; padding: 0;
-            cursor: pointer;
-            margin: 8px auto;
-        }
-
-        /* 이건 테스크탑 기준 - 모바일은 따로 설정할 필요가 있다. */
-        .youtube{
-            width: 60%;
-            height: 60%;
-        }
-
-        iframe{
-            display: block;
-            width: 100%;
-        }
-
-        .noVideo {
+        .carousel-font {
+            font-size: 50px;
+            font-family: 'Do Hyeon', sans-serif;
             color: white;
-        }
-
-        /* 모바일 전용 */
-        @media (max-width: 768px) {
-            .youtube {
-                width: 100%;
-                height: 100%;
-            }
         }
 
     </style>
 
     <script>
-        let page = 1;
-        const key = "your key";
-        const base_url = "https://image.tmdb.org/t/p/w300/";
-        const container = document.querySelector(".container");
-        const youtube = document.querySelector(".youtube");
-        const overlay = document.querySelector("#overlay");
-        const closeButton = document.querySelector(".close");
-        let currentScrollY = "";
-
         $(document).ready(function () {
             // 창을 새로고침할 때마다 실행할 함수를 여기에 입력합니다.
             showImage();
             showMovieRank();
             currentRunningMovie();
-
         });
         function onClickBtnLogOut() {
             $.ajax({
@@ -222,20 +132,33 @@
                             let id = movies[index]['id'];
                             let title = movies[index]['title'];
                             let backdrop_path = movies[index]['backdrop_path']
-                            let base_url = "https://image.tmdb.org/t/p/w1280/"
+                            let poster_url = "https://image.tmdb.org/t/p/w1280/"
+                            let base_url = "https://www.themoviedb.org/movie/"
+                            let overview = movies[index]['overview']
 
 
-                            let image = `<img src="${base_url}${backdrop_path}" class="d-block w-100" alt="...">`;
+
+                            let image = `<img src="${poster_url}${backdrop_path}" class="d-block w-100" alt="...">
+                                            <div class="carousel-caption">
+                                                 <a href="${base_url}${id}" class="carousel-font">${title}</a>
+                                                 <p style="color: #cccccc">${overview}</p>
+                                            </div>`;
                             $("#showimage01").append(image);
                         }
                         for (let index = 1; index < 2; index++) {
                             let id = movies[index]['id'];
                             let title = movies[index]['title'];
                             let backdrop_path = movies[index]['backdrop_path']
-                            let base_url = "https://image.tmdb.org/t/p/w1280/"
+                            let poster_url = "https://image.tmdb.org/t/p/w1280/"
+                            let base_url = "https://www.themoviedb.org/movie/"
+                            let overview = movies[index]['overview']
 
 
-                            let image = `<img src="${base_url}${backdrop_path}" class="d-block w-100" alt="...">`;
+                            let image = `<img src="${poster_url}${backdrop_path}" class="d-block w-100" alt="...">
+                                            <div class="carousel-caption">
+                                                 <a href="${base_url}${id}" class="carousel-font">${title}</a>
+                                                 <p style="color: #cccccc">${overview}</p>
+                                            </div>\`;`;
                             $("#showimage02").append(image);
                         }
                         for (let index = 2; index < 3; index++) {
@@ -244,9 +167,14 @@
                             let backdrop_path = movies[index]['backdrop_path']
                             let poster_url = "https://image.tmdb.org/t/p/w1280/"
                             let base_url = "https://www.themoviedb.org/movie/"
+                            let overview = movies[index]['overview']
 
 
-                            let image = `<img src="${poster_url}${backdrop_path}" class="d-block w-100" alt="...">`;
+                            let image = `<img src="${poster_url}${backdrop_path}" class="d-block w-100" alt="...">
+                                            <div class="carousel-caption">
+                                                 <a href="${base_url}${id}" class="carousel-font">${title}</a>
+                                                 <p style="color: #cccccc">${overview}</p>
+                                            </div>\`;`;
                             $("#showimage03").append(image);
                         }
                     }
@@ -266,46 +194,16 @@
                         let moviesLength = movies.length;
 
                         for (let index = 0; index < 12; index++) {
-                            let id = movies[index]['id'];
-                            let title = movies[index]['title'];
-                            let popularity = movies[index]['popularity'];
-                            let vote_count = movies[index]['vote_count'];
+                            let id = movies[index]['id']
+                            let title = movies[index]['title']
+                            let popularity = movies[index]['popularity']
+                            let vote_count = movies[index]['vote_count']
                             let release_date = movies[index]['release_date']
                             let poster_path = movies[index]['poster_path']
                             let poster_url = "https://image.tmdb.org/t/p/w1280/"
                             let base_url = "https://www.themoviedb.org/movie/"
 
-                            let movieCard = `<div class="movie-card">
-                                                <div class="movie-header" style="background-image: url(${poster_url}${poster_path}); background-size: cover;">
-                                                    <div class="header-icon-container">
-                                                        <a href="${base_url}${id}">
-                                                            <i class="material-icons header-icon"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="movie-content">
-                                                    <div class="movie-content-header">
-                                                        <a href="${base_url}${id}">
-                                                            <h3 class="movie-title movietitle-font">${title}</h3>
-                                                        </a>
-                                                        <div></div>
-                                                    </div>
-                                                    <div class="movie-info">
-                                                        <div class="info-section">
-                                                            <label>개봉날짜</label>
-                                                            <span>${release_date}</span>
-                                                        </div>
-                                                        <div class="info-section">
-                                                            <label>popularity</label>
-                                                            <span>${popularity}</span>
-                                                        </div>
-                                                        <div class="info-section">
-                                                            <label>vote_count</label>
-                                                            <span>${vote_count}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>`;
-                            $("#movie-rank").append(movieCard);
+                            getRankVideo(id,title, popularity, vote_count, release_date, poster_path, poster_url, base_url);
                         }
                     }
                 });
@@ -333,10 +231,73 @@
                             let poster_url = "https://image.tmdb.org/t/p/w1280/"
                             let base_url = "https://www.themoviedb.org/movie/"
 
-                            let movieCard = `<div class="movie-card">
+                            getCurrentVideo(id,title, popularity, vote_count, release_date, poster_path, poster_url, base_url)
+                        }
+                    }
+                });
+            }
+        function getRankVideo(id,title, popularity, vote_count, release_date, poster_path, poster_url, base_url) {
+            $.ajax({
+                    type: 'GET',
+                    url: 'https://api.themoviedb.org/3/movie/'+id+'/videos?',
+                    data: {"api_key": "a338932a06b8f07fb4c5638b91007531", 'language':'en-US'},
+                    success: function (response) {
+                        //console.log(response)
+                        videos = response["results"]
+
+                        let key = videos[0]['key'];
+                        //console.log(key)
+                        let video_url = 'https://www.youtube.com/watch?v='
+                        let movieCard = `<div class="movie-card">
                                                 <div class="movie-header" style="background-image: url(${poster_url}${poster_path}); background-size: cover;">
                                                     <div class="header-icon-container">
+                                                        <a href="${video_url}${key}">
+                                                            <i class="material-icons header-icon"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="movie-content">
+                                                    <div class="movie-content-header">
                                                         <a href="${base_url}${id}">
+                                                            <h3 class="movie-title movietitle-font">${title}</h3>
+                                                        </a>
+                                                        <div></div>
+                                                    </div>
+                                                    <div class="movie-info">
+                                                        <div class="info-section">
+                                                            <label>개봉날짜</label>
+                                                            <span>${release_date}</span>
+                                                        </div>
+                                                        <div class="info-section">
+                                                            <label>popularity</label>
+                                                            <span>${popularity}</span>
+                                                        </div>
+                                                        <div class="info-section">
+                                                            <label>vote_count</label>
+                                                            <span>${vote_count}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>`;
+                            $("#movie-rank").append(movieCard);
+                    }
+                });
+            }
+            function getCurrentVideo(id,title, popularity, vote_count, release_date, poster_path, poster_url, base_url) {
+            $.ajax({
+                    type: 'GET',
+                    url: 'https://api.themoviedb.org/3/movie/'+id+'/videos?',
+                    data: {"api_key": "a338932a06b8f07fb4c5638b91007531", 'language':'en-US'},
+                    success: function (response) {
+                        //console.log(response)
+                        videos = response["results"]
+
+                        let key = videos[0]['key'];
+                        //console.log(key)
+                        let video_url = 'https://www.youtube.com/watch?v='
+                        let movieCard = `<div class="movie-card">
+                                                <div class="movie-header" style="background-image: url(${poster_url}${poster_path}); background-size: cover;">
+                                                    <div class="header-icon-container">
+                                                        <a href="${video_url}${key}">
                                                             <i class="material-icons header-icon"></i>
                                                         </a>
                                                     </div>
@@ -364,68 +325,9 @@
                                                     </div>
                                                 </div>`;
                             $("#current-movie").append(movieCard);
-                        }
                     }
                 });
             }
-            function openView(e){
-                //영화의 아이디를 가져 왔다.
-                const movieId = e.getAttribute("data-id");
-                console.log(movieId);
-
-                //다시 요청을 해서 유튜브 플레이용 아이디(key)를 가져와야 한다. 언어를 한국어로 한정하면 비디오를 찾지 못하는 경우가 많다.
-                const movieUrl = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${key}`;
-                fetch(movieUrl)
-                    .then(res => res.json())
-                    .then(function(res){
-                        let output = "";
-
-                        if(res.results.length > 0){
-                            const youtubeId = res.results[0].key;//첫번재 영상만 사용하기 하자. 값이 없을 경우도 있음.
-                            output = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${youtubeId}?autoplay=1"></iframe>`;
-                        } else {
-                            output = `<h3 class="noVideo">재생할 예고편이 없습니다.</h3>`;
-                            console.log(output);
-                        }
-
-                        youtube.innerHTML = output;
-                    })
-                    .catch(erro => console.log(erro));
-                //포스트의 url을 가져 왔다.
-                const posterImage = e.querySelector("img").src;
-                //오버레이를 열고 영상을 출력 하자.
-
-                overlay.classList.add("show");
-
-                overlay.setAttribute("style", `background-image: url(${posterImage}); background-size: auto; background-repeat: no-repeat;`)
-                //배경 body 스크롤 중지
-                document.body.classList.add("stop-scrolling");
-
-            }
-
-            // 클로즈 버튼을 클릭하면 오버레이 show 클래스를 삭제해서 오버레이를 사라지게 함
-            closeButton.addEventListener('click', () => {
-                overlay.classList.remove("show");
-                youtube.innerHTML = "";
-                //스크롤 방지 해제
-                document.body.classList.remove("stop-scrolling");
-            });
-
-
-            //윈도우 로드시 기본으로 한번 함수 실행함.
-            window.addEventListener('onLoad', fetchMovie());
-
-            //더보기 버튼 클릭 리스너
-            const moreButton = document.querySelector(".more");
-            moreButton.addEventListener('click', function(){
-                if(page < 3){
-                    page += 1;
-                    fetchMovie(page);
-                } else {
-                    this.disabled = true;
-                }
-                //console.log(page);
-            });
 
         {#    Date.prototype.yyyymmdd = function() {#}
         {#        var yyyy = this.getFullYear().toString();#}

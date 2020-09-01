@@ -4,6 +4,7 @@
   <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="{{url_for('static', filename='card.css')}}" rel="stylesheet" id="card-css">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -22,6 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
 
     <title>Movie delivery</title>
 
@@ -53,144 +55,160 @@
             height: 800px;
         }
         .wrap {
-            width: 1100px;
+            width: 1350px;
             margin: auto;
             margin-top: 50px;
         }
         .background{
             background-color: black;
         }
-        .card-size{
-            margin: 10px;
-            width: 200px;
-            height: auto;
+        .movietitle-font {
+            font-size: 20px;
+            font-family: 'Do Hyeon', sans-serif;
+            color: black;
         }
 
     </style>
 
     <script>
         $(document).ready(function () {
-            $('#selectgenre a').on('click', function() {
-                // 선택된 항목 값(value) 얻기
-                let selectgenrename = $(this).text();
-                let selectgenre = $(this).attr('value');
-                alert(selectgenrename+"를 고르셨어요")
-                movieGenre(selectgenre);
-                //getValue(selectgenre)
-
+            selectGenreValue();
+            selectNationValue();
             });
-        });
-        function onClickBtnLogOut() {
-            $.ajax({
-                url: '/logout',
-                method: 'POST',
-                data: {},
-                success: function (response) {
-                    $(location).attr('href', '/');
-                }
-            })
-        }
-        function onClickHome() {
-            $(location).attr('href', '/');
-        }
-        function onClickRate() {
-            $(location).attr('href', '/rating');
-        }
-        function onClickGenre() {
-            $(location).attr('href', '/genre');
-        }
-        function onClickSearch() {
-            $(location).attr('href', '/search');
-        }
-        function onClickMypage() {
-            $(location).attr('href', '/mypage');
-        }
-        {#function selectNationValue() {#}
-        {#    $('#selectnation a').on('click', function() {#}
-        {#        // 선택된 항목 값(value) 얻기#}
-        {#        let selectnationname = $(this).text();#}
-        {#        let selectnation = $(this).attr('value');#}
-        {#        //getValue(selectnation)#}
-        {#        movieGenre(selectnation);#}
-        {#        //alert(selectnationname+"를 고르셨어요")#}
-        {#    });#}
 
-        {#function getValue(selectgenre,selectnation) {#}
-        {#    if (selectgenre !== null && selectnation !== null){#}
-        {#        movieGenre(selectgenre, selectnation);#}
-        {#        //alert(selectnationname+"나라의 "+selectgenrename+"장르를 고르셨어요")#}
-        {#    }#}
-        {#    else if (selectgenre !== null && selectnation === null) {#}
-        {#        let selectnation = false;#}
-        {#        movieGenre(selectgenre, selectnation);#}
-        {#        //alert(selectgenrename+"를 고르셨어요")#}
-        {#    }#}
-        {#    else if (selectgenre === null && selectnation !== null) {#}
-        {#        let selectgenre = false;#}
-        {#        movieGenre(selectgenre, selectgenre);#}
-        {#        //alert(selectnationname+"를 고르셨어요")#}
-        {#    }#}
-
-        function movieGenre(selectgenre) {
-            $('#cards-box').empty()
-            $.ajax({
-                type: 'GET',
-                url: 'https://api.themoviedb.org/3/discover/movie?',
-                data: {"api_key": "a338932a06b8f07fb4c5638b91007531",'language':'ko-KR', 'sort_by':'vote_count.desc','include_viedio':'false','page':1,'with_genres':selectgenre},
-                success: function (response) {
-                    console.log(response)
-                    let movies = response["results"]
-                    let moviesLength = movies.length;
-
-                    for (let index = 0; index < moviesLength; index++) {
-                        let id = movies[index]['id'];
-                        let title = movies[index]['title'];
-                        let poster_path = movies[index]['poster_path'];
-                        let poster_url = "https://image.tmdb.org/t/p/w300/"
-                        let base_url = "https://www.themoviedb.org/movie/"
-
-                        let movieCard = `<div class="card card-size">
-                                                        <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
-                                                        <div class="card-body text-center">
-                                                        <a href="${base_url}${id}" target="_blank" class="link-font">${title}</a>
-                                                        </div>
-                                                    </div>`;
-                            $("#cards-box").append(movieCard);
-
+            function onClickBtnLogOut() {
+                $.ajax({
+                    url: '/logout',
+                    method: 'POST',
+                    data: {},
+                    success: function (response) {
+                        $(location).attr('href', '/');
                     }
-                }
-            });
-        }
+                })
+            }
 
-        {#function movieNation(selectnation) {#}
-        {#    $('#cards-box').empty()#}
-        {#    $.ajax({#}
-        {#        type: 'GET',#}
-        {#        url: 'https://api.themoviedb.org/3/discover/movie?',#}
-        {#        data: {"api_key": "a338932a06b8f07fb4c5638b91007531",'language':'ko-KR', 'sort_by':'vote_count.desc','include_viedio':'false','page':1,'region':selectnation},#}
-        {#        success: function (response) {#}
-        {#            console.log(response)#}
-        {#            let movies = response["results"]#}
-        {#            let moviesLength = movies.length;#}
-        {##}
-        {#            for (let index = 0; index < moviesLength; index++) {#}
-        {#                let id = movies[index]['id'];#}
-        {#                let title = movies[index]['title'];#}
-        {#                let poster_path = movies[index]['poster_path'];#}
-        {#                let poster_url = "https://image.tmdb.org/t/p/w300/"#}
-        {#                let base_url = "https://www.themoviedb.org/movie/"#}
-        {##}
-        {#                let movieCard = `<div class="card">#}
-        {#                                                <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">#}
-        {#                                                <div class="card-body text-center">#}
-        {#                                                <a href="${base_url}${id}" target="_blank" class="link-font">${title}</a>#}
-        {#                                                </div>#}
-        {#                                            </div>`;#}
-        {#                    $("#cards-box").append(movieCard);#}
-        {##}
-        {#            }#}
-        {#        }#}
-        {#    });#}
+            function onClickHome() {
+                $(location).attr('href', '/');
+            }
+
+            function onClickRate() {
+                $(location).attr('href', '/rating');
+            }
+
+            function onClickGenre() {
+                $(location).attr('href', '/genre');
+            }
+
+            function onClickSearch() {
+                $(location).attr('href', '/search');
+            }
+
+            function onClickMypage() {
+                $(location).attr('href', '/mypage');
+            }
+            let selectgenre = [];
+            let selectnation = [];
+            let selectgenrename = [];
+            let selectnationname = [];
+            function selectGenreValue() {
+                $('#selectgenreid a').on('click', function () {
+                    // 선택된 항목 값(value) 얻기
+                    selectgenrename = $(this).text();
+                    selectgenre = $(this).attr('value');
+                    //alert(selectgenrename + "를 고르셨어요")
+                    //movieGenre(selectgenre);
+                    getValue(selectgenre)
+                });
+            }
+
+            function selectNationValue() {
+                $('#selectnationid a').on('click', function () {
+                    selectnationname = $(this).text();
+                    selectnation = $(this).attr('value');
+                    //alert(selectnationname + "를 고르셨어요")
+                    //movieNation(selectnation);
+                    getValue(selectnation)
+                    console.log(selectnation)
+                });
+            }
+
+
+            function getValue() {
+                if (selectgenre !== null && selectnation !== null) {
+                    Select(selectgenre, selectnation);
+                    alert(selectnationname+"나라의 "+selectgenrename+"장르를 고르셨어요")
+                } else if (selectgenre !== null && selectnation === null) {
+                    let selectnation = false;
+                    Select(selectgenre, selectnation);
+                    alert(selectgenrename+"를 고르셨어요")
+                } else if (selectgenre === null && selectnation !== null) {
+                    let selectgenre = false;
+                    Select(selectgenre, selectgenre);
+                    alert(selectnationname+"를 고르셨어요")
+                }
+            }
+            function Select(selectgenre, selectnation) {
+                $('#cards-box').empty()
+                let movie_page;
+                for (movie_page = 1; movie_page < 3; movie_page++) {
+                    $.ajax({
+                        type: 'GET',
+                        url: 'https://api.themoviedb.org/3/discover/movie?',
+                        data: {
+                            "api_key": "a338932a06b8f07fb4c5638b91007531",
+                            'language': 'ko-KR',
+                            'sort_by': 'vote_count.desc',
+                            'include_video': 'false',
+                            'page': movie_page,
+                            'with_genres': selectgenre,
+                            'with_original_language': selectnation
+                        },
+                        success: function (response) {
+                            //console.log(response)
+                            let movies = response["results"]
+                            let moviesLength = movies.length;
+
+                            for (let index = 0; index < moviesLength; index++) {
+                                let id = movies[index]['id'];
+                                let title = movies[index]['title'];
+                                let popularity = movies[index]['popularity'];
+                                let vote_count = movies[index]['vote_count'];
+                                let release_date = movies[index]['release_date']
+                                let poster_path = movies[index]['poster_path']
+                                let poster_url = "https://image.tmdb.org/t/p/w1280/"
+                                let base_url = "https://www.themoviedb.org/movie/"
+
+                                let movieCard = `<div class="movie-card">
+                                                <div class="movie-header" style="background-image: url(${poster_url}${poster_path}); background-size: cover;">
+                                                </div>
+                                                <div class="movie-content">
+                                                    <div class="movie-content-header">
+                                                        <a href="${base_url}${id}">
+                                                            <h3 class="movie-title movietitle-font">${index + 1}. ${title}</h3>
+                                                        </a>
+                                                        <div></div>
+                                                    </div>
+                                                    <div class="movie-info">
+                                                        <div class="info-section">
+                                                            <label>개봉날짜</label>
+                                                            <span>${release_date}</span>
+                                                        </div>
+                                                        <div class="info-section">
+                                                            <label>popularity</label>
+                                                            <span>${popularity}</span>
+                                                        </div>
+                                                        <div class="info-section">
+                                                            <label>vote_count</label>
+                                                            <span>${vote_count}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>`;
+                                $("#cards-box").append(movieCard);
+                            }
+                        }
+                    });
+                }
+            }
 
     </script>
 </head>
@@ -242,7 +260,8 @@
       <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="sr-only">Toggle Dropdown</span>
       </button>
-      <div class="dropdown-menu" id="selectgenre">
+      <div class="dropdown-menu" id="selectgenreid">
+        <a class="dropdown-item" href="#" value="">모든 장르</a>
         <a class="dropdown-item" href="#" value="28">액션</a>
         <a class="dropdown-item" href="#" value="12">모험</a>
         <a class="dropdown-item" href="#" value="16">애니메이션</a>
@@ -264,28 +283,25 @@
         <a class="dropdown-item" href="#" value="37">서부</a>
       </div>
     </div>
-{#    <div class="btn-group">#}
-{#      <button type="button" class="btn btn-danger">Nation</button>#}
-{#      <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-{#        <span class="sr-only">Toggle Dropdown</span>#}
-{#      </button>#}
-{#      <div class="dropdown-menu" id="selectnation" onclick="selectNationValue()">#}
-{#        <a class="dropdown-item" href="#" value="US">미국</a>#}
-{#        <a class="dropdown-item" href="#" value="KR">한국</a>#}
-{#        <a class="dropdown-item" href="#" value="JP">일본</a>#}
-{#        <a class="dropdown-item" href="#" value="HK">홍콩</a>#}
-{#        <a class="dropdown-item" href="#" value="TW">대만</a>#}
-{#        <a class="dropdown-item" href="#" value="CN">중국</a>#}
-{#        <a class="dropdown-item" href="#" value="ID">인도</a>#}
-{#        <a class="dropdown-item" href="#" value="CA">캐나다</a>#}
-{#        <a class="dropdown-item" href="#" value="IT">이탈리아</a>#}
-{#        <a class="dropdown-item" href="#" value="ES">스페인</a>#}
-{#        <a class="dropdown-item" href="#" value="FR">프랑스</a>#}
-{#        <a class="dropdown-item" href="#" value="DE">독일</a>#}
-{#        <a class="dropdown-item" href="#" value="GB">영국</a>#}
-{#      </div>#}
-{#    </div>#}
-    <div class="row mb-5" id="cards-box" style="margin-top: 15px">
+    <div class="btn-group">
+      <button type="button" class="btn btn-danger">Language</button>
+      <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="sr-only">Toggle Dropdown</span>
+      </button>
+      <div class="dropdown-menu" id="selectnationid">
+        <a class="dropdown-item" href="#" value="">모든 언어</a>
+        <a class="dropdown-item" href="#" value=en>영어</a>
+        <a class="dropdown-item" href="#" value="ko">한국어</a>
+        <a class="dropdown-item" href="#" value="ja">일본어</a>
+        <a class="dropdown-item" href="#" value="zh">중국어</a>
+        <a class="dropdown-item" href="#" value="hi">인도어</a>
+        <a class="dropdown-item" href="#" value="it">이탈리아어</a>
+        <a class="dropdown-item" href="#" value="es">스페인어</a>
+        <a class="dropdown-item" href="#" value="fr">프랑스어</a>
+        <a class="dropdown-item" href="#" value="de">독일어</a>
+      </div>
+    </div>
+    <div id="cards-box" style="margin-top: 15px">
 
     </div>
 </div>

@@ -4,6 +4,7 @@
   <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="{{url_for('static', filename='card.css')}}" rel="stylesheet" id="card-css">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -23,6 +24,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
 
 
     <title>Movie delivery</title>
@@ -55,7 +57,7 @@
             height: 800px;
         }
         .wrap {
-            width: 1100px;
+            width: 1350px;
             margin: auto;
             margin-top: 50px;
         }
@@ -69,10 +71,9 @@
         .date-font-color{
             color: gray;
         }
-        .card-size{
-            margin: 10px;
-            width: 200px;
-            height: auto;
+        .movietitle-font{
+            color: black;
+            font-family: 'Do Hyeon', sans-serif;
         }
 
     </style>
@@ -121,19 +122,43 @@
                     let moviesLength = movies.length;
 
                     for (let index = 0; index < moviesLength; index++) {
-                        let id = movies[index]['id'];
-                        let title = movies[index]['title'];
-                        let poster_path = movies[index]['poster_path']
-                        let poster_url = "https://image.tmdb.org/t/p/w300/"
-                        let base_url = "https://www.themoviedb.org/movie/"
+                        for (let index = 0; index < moviesLength; index++) {
+                            let id = movies[index]['id'];
+                            let title = movies[index]['title'];
+                            let popularity = movies[index]['popularity'];
+                            let vote_count = movies[index]['vote_count'];
+                            let release_date = movies[index]['release_date']
+                            let poster_path = movies[index]['poster_path']
+                            let poster_url = "https://image.tmdb.org/t/p/w1280/"
+                            let base_url = "https://www.themoviedb.org/movie/"
 
-                        let movieCard = `<div class="card card-size">
-                                                        <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
-                                                        <div class="card-body text-center">
-                                                        <a href="${base_url}${id}" target="_blank" class="link-font">${title}</a>
+                            let movieCard = `<div class="movie-card">
+                                                <div class="movie-header" style="background-image: url(${poster_url}${poster_path}); background-size: cover;">
+                                                </div>
+                                                <div class="movie-content">
+                                                    <div class="movie-content-header">
+                                                        <a href="${base_url}${id}">
+                                                            <h3 class="movie-title movietitle-font">${title}</h3>
+                                                        </a>
+                                                        <div></div>
+                                                    </div>
+                                                    <div class="movie-info">
+                                                        <div class="info-section">
+                                                            <label>개봉날짜</label>
+                                                            <span>${release_date}</span>
                                                         </div>
-                                                    </div>`;
-                        $("#cards-box").append(movieCard);
+                                                        <div class="info-section">
+                                                            <label>popularity</label>
+                                                            <span>${popularity}</span>
+                                                        </div>
+                                                        <div class="info-section">
+                                                            <label>vote_count</label>
+                                                            <span>${vote_count}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>`;
+                            $("#cards-box").append(movieCard);
+                        }
                     }
                 }
             });
