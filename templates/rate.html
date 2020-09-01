@@ -204,17 +204,18 @@
                         let genre = movies['genres'][0]['name'];
                         let overview = movies['overview'];
                         let nation = movies['production_countries'][0]['name'];
+                        let release_date = movies['release_date']
 
-                        give_movie_detail(tmdbid,title,genre,overview,nation);
-                        countGenre(genre);
+                        give_movie_detail(tmdbid,title,genre,overview,nation,release_date);
+                        //countGenre(genre);
                     }
                 })
             }
-            function give_movie_detail(tmdbid,title,genre,overview,nation) {
+            function give_movie_detail(tmdbid,title,genre,overview,nation,release_date) {
             $.ajax({
                 type: "POST",
                 url: "/mymovie",
-                data: {tmdbid_give: tmdbid, title_give: title, genre_give: genre, overview_give:overview, nation_give:nation},
+                data: {tmdbid_give: tmdbid, title_give: title, genre_give: genre, overview_give:overview, nation_give:nation, release_date_give:release_date},
                 success: function (response) {
                     if (response["result"] == "success") {
                         window.location.reload();
@@ -253,19 +254,18 @@
         {#        });#}
         {#    }#}
 
-        function countGenre(genre){
-            $.ajax({
-                type: "POST",
-                url: "/countGenre",
-                data: {genre_give: genre},
-                success: function (response) {
-                    if (response["result"] == "success") {
-                        alert(response["msg"]);
-                        window.location.reload();
-                    }
-                }
-            });
-        }
+        {#function countGenre(genre){#}
+        {#    $.ajax({#}
+        {#        type: "POST",#}
+        {#        url: "/countGenre",#}
+        {#        data: {genre_give: genre},#}
+        {#        success: function (response) {#}
+        {#            if (response["result"] == "success") {#}
+        {#                alert(response["msg"]);#}
+        {#                window.location.reload();#}
+        {#            }#}
+        {#        }#}
+        {#    });#}
 
     </script>
 

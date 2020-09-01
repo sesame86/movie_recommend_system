@@ -118,6 +118,7 @@ def create_movie():
     genre_receive = request.form['genre_give']
     overview_receive = request.form['overview_give']
     nation_receive = request.form['nation_give']
+    release_date_receive = request.form['release_date_give']
 
     Mymovie_list = {
         'userid':userid_recive,
@@ -125,7 +126,8 @@ def create_movie():
         'title':title_receive,
         'genre':genre_receive,
         'overview':overview_receive,
-        'nation':nation_receive
+        'nation':nation_receive,
+        'release_date':release_date_receive
     }
     db.Mymovie_list.insert_one(Mymovie_list)
 
@@ -252,7 +254,7 @@ def movie_recommend():
 def count_genre():
     session_id = session['sessionID']
     genres = list(db.Mymovie_list.find({'userid':session_id}, {'_id': False, 'userid': False, 'tmdbid': False, 'title': False,
-                                                'overview': False, 'nation': False}))
+                                                'overview': False, 'nation': False,'release_date':False}))
     genre_list = []
     for i in genres:
         for index, genre in i.items():
@@ -273,13 +275,12 @@ def count_rate():
             rate_list.append(rate)
     rate_count = collections.Counter(rate_list)
 
-
     return jsonify({'result': 'success', 'rate_list': rate_count})
 
 @app.route('/countNation', methods=['GET'])
 def count_nation():
     session_id = session['sessionID']
-    nations = list(db.Mymovie_list.find({'userid':session_id}, {'_id': False, 'userid':False, 'tmdbid':False, 'title':False, 'genre':False, 'overview':False}))
+    nations = list(db.Mymovie_list.find({'userid':session_id}, {'_id': False, 'userid':False, 'tmdbid':False, 'title':False, 'genre':False, 'overview':False,'release_date':False}))
 
     nation_list = []
     for i in nations:
@@ -288,6 +289,20 @@ def count_nation():
     nation_count = collections.Counter(nation_list)
 
     return jsonify({'result': 'success', 'nation_list': nation_count})
+
+@app.route('/countYear', methods=['GET'])
+def count_year():
+    session_id = session['sessionID']
+    release_date = list(db.Mymovie_list.find({'userid':session_id}, {'_id': False, 'userid':False, 'tmdbid':False, 'title':False, 'genre':False, 'overview':False,'nation':False}))
+
+    year_list = []
+
+    for i in release_date:
+        for index, date in i.items():
+            year_list.append(date[:4])
+    year_count = collections.Counter(year_list)
+
+    return jsonify({'result': 'success', 'year_list': year_count})
 
 @app.route('/search', methods=['GET'])
 def search_page():
