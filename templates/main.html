@@ -196,13 +196,13 @@
                             let id = movies[index]['id']
                             let title = movies[index]['title']
                             let popularity = movies[index]['popularity']
-                            let vote_count = movies[index]['vote_count']
+                            let vote_average = movies[index]['vote_average']
                             let release_date = movies[index]['release_date']
                             let poster_path = movies[index]['poster_path']
                             let poster_url = "https://image.tmdb.org/t/p/w1280/"
                             let base_url = "https://www.themoviedb.org/movie/"
 
-                            getRankVideo(id,title, popularity, vote_count, release_date, poster_path, poster_url, base_url);
+                            getRankVideo(id,title, popularity, vote_average, release_date, poster_path, poster_url, base_url);
                         }
                     }
                 });

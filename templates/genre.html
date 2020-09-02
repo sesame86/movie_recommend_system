@@ -136,13 +136,13 @@
             function getValue() {
                 if (selectgenre !== null && selectnation !== null) {
                     Select(selectgenre, selectnation);
-                    alert(selectnationname+"나라의 "+selectgenrename+"장르를 고르셨어요")
-                } else if (selectgenre !== null && selectnation === null) {
-                    let selectnation = false;
+                    alert(selectnationname+"의 "+selectgenrename+"장르를 고르셨어요")
+                } else if (selectgenre !== null && selectnation == null) {
+                    let selectnation = '';
                     Select(selectgenre, selectnation);
                     alert(selectgenrename+"를 고르셨어요")
-                } else if (selectgenre === null && selectnation !== null) {
-                    let selectgenre = false;
+                } else if (selectgenre == null && selectnation !== null) {
+                    let selectgenre = '';
                     Select(selectgenre, selectgenre);
                     alert(selectnationname+"를 고르셨어요")
                 }
@@ -171,7 +171,7 @@
                                 let id = movies[index]['id'];
                                 let title = movies[index]['title'];
                                 let popularity = movies[index]['popularity'];
-                                let vote_count = movies[index]['vote_count'];
+                                let vote_average = movies[index]['vote_average'];
                                 let release_date = movies[index]['release_date']
                                 let poster_path = movies[index]['poster_path']
                                 let poster_url = "https://image.tmdb.org/t/p/w1280/"
@@ -197,8 +197,8 @@
                                                             <span>${popularity}</span>
                                                         </div>
                                                         <div class="info-section">
-                                                            <label>vote_count</label>
-                                                            <span>${vote_count}</span>
+                                                            <label>vote_average</label>
+                                                            <span>${vote_average}</span>
                                                         </div>
                                                     </div>
                                                 </div>`;
@@ -249,8 +249,8 @@
 
 <div class="wrap">
     <div class="jumbotron jumbotron-style">
-        <h1 class="display-4">🎬관심있는 장르를 골라보세요</h1>
-        <p class="lead"><font class="jumbo-font">장르별 TOP20을 보여드려요🌏</font></p>
+        <h1 class="display-4">🎬관심있는 장르/언어를 골라보세요</h1>
+        <p class="lead"><font class="jumbo-font">장르별/언어별 TOP20을 보여드려요🌏</font></p>
     </div>
 
     <div class="btn-group">
