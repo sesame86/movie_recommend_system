@@ -132,7 +132,9 @@
         function onClickMypage() {
             $(location).attr('href', '/mypage');
         }
-
+        function onClickdetail(id) {
+            location.href="/detail?movie="+id
+        }
         function recommendMovie() {
             $.ajax({
                 type: 'GET',
@@ -140,12 +142,13 @@
                 data: {},
                 success: function (response) {
                     predict = response['predict_list']
-                    predictLength = predict.length;
-                    //console.log(response)
+                    //predictLength = predict.length;
+                    console.log(predict)
 
-                    for (let index = 0; index < predictLength; index++){
+                    for (let index = 0; index < 50; index++){
                         tmdbid = predict[index][0];
                         predict_rate = predict[index][1];
+                        //console.log(predict_rate)
                         getMovieDetail(index, tmdbid, predict_rate);
                     }
                 }
@@ -156,6 +159,7 @@
                     type:"GET",
                     url: "https://api.themoviedb.org/3/movie/"+tmdbid,
                     data: {'api_key':'a338932a06b8f07fb4c5638b91007531','language':'ko-KR'},
+                    async: false,
                     success: function (response) {
                         //console.log(response)
                         let movies = response;
@@ -163,7 +167,12 @@
                         //console.log(movies)
                         let tmdbid = movies['id'];
                         let title = movies['title'];
-                        let genre = movies['genres'][0]['name'];
+                        let genre = [];
+                        let genre_length = movies['genres'].length
+                        for (let i = 0; i < genre_length; i++){
+                            genre.push(movies['genres'][i]['name']);
+                        }
+                        //console.log(genre)
                         let overview = movies['overview'];
                         let nation = movies['production_countries'][0]['name'];
                         let release_date = movies['release_date'];
@@ -173,10 +182,10 @@
 
                         //console.log(title)
                         let predict_list = `<tr>
-                                              <th scope="row">${index}</th>
-                                              <td>${title}</td>
+                                              <th scope="row">${index+1}</th>
+                                              <td><a href="#" onclick="onClickdetail(${tmdbid})" style="color: white">${title}</a></td>
                                               <td>${predict_rate}</td>
-                                              <td>${release_date}</td>
+                                              <td>${genre}</td>
                                             </tr>`
                         $("#predictList").append(predict_list);
                     }
@@ -215,7 +224,7 @@
             </nav>
             <nav class="navbar navbar-dark">
                 <form class="form-inline">
-                    <a class="btn btn-outline-light" role="button" onclick="onClickBtnLogOut()">Logout</a>
+                    <a class="btn btn-outline-light" role="button" href="#" onclick="onClickBtnLogOut()">Logout</a>
                 </form>
             </nav>
         </div>
@@ -223,7 +232,7 @@
 </header>
     <div class="wrap">
         <div class="jumbotron jumbotron-style">
-            <h1 class="display-4">🧐당신의 취향을 반영한 결과를 보여드릴게요</h1>
+            <h1 class="display-4">🧐당신의 취향을 반영한 분석결과를 보여드릴게요</h1>
             <p class="lead"><font class="jumbo-font">이용해 주셔서 감사합니다🐹</font></p>
         </div>
     <div class="row">
@@ -273,10 +282,10 @@
         <table class="table table-dark list-wrap" style="border-radius: 10px">
           <thead>
             <tr>
-              <th scope="col">rank</th>
-              <th scope="col">title</th>
-              <th scope="col">predict rate</th>
-              <th scope="col">release date</th>
+              <th scope="col">순위</th>
+              <th scope="col">제목</th>
+              <th scope="col">예상 점수</th>
+              <th scope="col">장르</th>
             </tr>
           </thead>
           <tbody id="predictList">

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+
+    <title>Movie delivery</title>
+</head>
+<style>
+    * {
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+    .site-title-font {
+        color: red;
+        font-family: 'Srisakdi', cursive;
+        font-size: 27px;
+    }
+    .navbar-background{
+        background-color: black;
+        opacity: 80%;
+    }
+    body{
+        background: #000;
+    }
+    .background-image{
+        background-size: cover;
+        clip-path: ellipse(1800px 600px at 20% 0%);
+        width: 100%;
+        height: 600px;
+    }
+    .background-image::before{
+        position: absolute;
+        content: '';
+        background: -webkit-gradient(linear, left bottom, left top, from(rgb(0,0,0)), to(transparent));
+        background: linear-gradient(to top, rgb(0,0,0), transparent);
+        width: 100%;
+        height: 100%;
+    }
+    .background-image::after{
+        position: absolute;
+        content: '';
+        background: -webkit-gradient(linear, left bottom, left top, from(rgb(0,0,0)), to(transparent));
+        background: linear-gradient(to top, rgb(0,0,0), transparent);
+        width: 100%;
+        height: 100%;
+    }
+    .movie-details img{
+        position: relative;
+        top: -180px;
+        left: 80px;
+        width: 40%;
+        height: 40%;
+    }
+    .movie-details-content {
+        position: relative;
+        top: -650px;
+        left: 450px;
+        width: 80%;
+        height: 80%;
+    }
+    .movie-image {
+        margin-top: 180px;
+        width: 1%;
+        height: 1%;
+    }
+    .random-movie-font {
+        position: relative;
+        top: -480px;
+        left: 0px;
+        width: 80%;
+        height: 80%;
+    }
+    .random-movie img{
+        margin: 10px;
+        position: relative;
+        top: -480px;
+        left: 0px;
+        width: 80%;
+        height: 80%;
+    }
+    .random-movie img:hover {
+        opacity: 0.5;
+        cursor: pointer;
+        position: relative;
+        top: -480px;
+        left: 0px;
+        width: 80%;
+        height: 80%;
+    }
+    .tag {
+        position: relative;
+        top: -500px;
+        left: 0px;
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        let id = location.href.substr(
+            location.href.lastIndexOf('=') + 1
+        );
+        //console.log('val : ' + id);
+        getBackimage(id);
+        detailPage(id);
+        getSimilar(id);
+        getKeyword(id);
+    });
+    function onClickBtnLogOut() {
+        $.ajax({
+            url: '/logout',
+            method: 'POST',
+            data: {},
+            success: function (response) {
+                $(location).attr('href', '/');
+            }
+        })
+    }
+    function onClickHome() {
+        $(location).attr('href', '/');
+    }
+    function onClickRate() {
+        $(location).attr('href', '/rating');
+    }
+    function onClickGenre() {
+        $(location).attr('href', '/genre');
+    }
+    function onClickSearch() {
+        $(location).attr('href', '/search');
+    }
+    function onClickMypage() {
+        $(location).attr('href', '/mypage');
+    }
+    function onClickdetail(id) {
+        location.href="/detail?movie="+id
+    }
+    function getBackimage(id){
+        $.ajax({
+            type: 'GET',
+            url: 'https://api.themoviedb.org/3/movie/' + id + '?',
+            data: {"api_key": "a338932a06b8f07fb4c5638b91007531", 'language': 'ko-KR'},
+            success: function (response) {
+                let movies = response
+                let backdrop_path = movies['backdrop_path']
+                let poster_url = "https://image.tmdb.org/t/p/w1280/"
+
+                let image = `<div class="background-image" style="background: url(${poster_url}${backdrop_path}) no-repeat center;"></div>`
+                $("#image").append(image);
+            }
+        });
+    }
+    function detailPage(id){
+        $.ajax({
+            type: 'GET',
+            url: 'https://api.themoviedb.org/3/movie/' + id + '?',
+            data: {"api_key": "a338932a06b8f07fb4c5638b91007531", 'language': 'ko-KR'},
+            success: function (response) {
+                let movies = response
+                //console.log(response)
+                let id = movies['id']
+                let title = movies['title']
+                let adult = movies['adult']
+                let popularity = movies['popularity']
+                let vote_average = movies['vote_average']
+                let vote_count = movies['vote_count']
+                let release_date = movies['release_date']
+                let nation = []
+                let nation_length = movies['production_countries'].length
+                for (let j = 0; j < nation_length; j++){
+                    nation.push(movies['production_countries'][j]['name'])
+                }
+                let budget = movies['budget']
+                let genre = [];
+                let genre_length = movies['genres'].length
+                for (let i = 0; i < genre_length; i++){
+                    genre.push(movies['genres'][i]['name']);
+                }
+                let overview = movies['overview']
+                let runtime = movies['runtime']
+
+                let poster_path = movies['poster_path']
+                let poster_url = "https://image.tmdb.org/t/p/w1280/"
+                let base_url = "https://www.themoviedb.org/movie/"
+
+                getVideo(id,title, popularity, vote_average, vote_count, release_date, poster_path, poster_url, base_url, genre,runtime,adult,nation,overview)
+            }
+        });
+    }
+    function getSimilar(id){
+        $.ajax({
+            type: 'GET',
+            url: 'https://api.themoviedb.org/3/movie/'+ id +'/similar?',
+            data: {"api_key": "a338932a06b8f07fb4c5638b91007531", 'language': 'ko-KR'},
+            success: function (response) {
+                let movies = response['results']
+                //console.log(movies)
+                let moviesLength = movies.length
+                for (let index = 0; index < moviesLength; index++){
+                    let id = movies[index]['id'];
+                    let title = movies[index]['title'];
+                    let vote_average = movies[index]['vote_average'];
+                    let release_date = movies[index]['release_date'];
+                    let backdrop_path = movies[index]['backdrop_path'];
+                    let poster_path = movies[index]['poster_path'];
+                    let genre = [];
+
+                    let poster_url = "https://image.tmdb.org/t/p/w1280/"
+                    let base_url = "https://www.themoviedb.org/movie/"
+
+                    let similar = `<a href="#" onclick="onClickdetail(${id})"><img src="${poster_url}${poster_path}"style="width: 10%; height: auto" class="img-fluid" alt="">`
+                    $("#similarMovie").append(similar);
+                }
+            }
+        });
+    }
+    function getVideo(id,title, popularity, vote_average, vote_count, release_date, poster_path, poster_url, base_url, genre,runtime,adult,nation,overview) {
+        $.ajax({
+            type: 'GET',
+            url: 'https://api.themoviedb.org/3/movie/'+id+'/videos?',
+            data: {"api_key": "a338932a06b8f07fb4c5638b91007531", 'language':'en-US'},
+            success: function (response) {
+                //console.log(response)
+                videos = response["results"]
+
+                let key = videos[0]['key'];
+                //console.log(key)
+                let video_url = 'https://www.youtube.com/watch?v='
+
+                let detail = `<img src="${poster_url}${poster_path}" alt="">
+                                      <div class="movie-details-content ml-5 text-light">
+                                           <h1>${title} <font style="font-size: 20px;color: lightgray"> ${release_date}</font></h1>
+                                           <span class="badge badge-pill badge-danger" style="font-size: 15px">${nation}</span>
+                                           <span class="badge badge-pill badge-warning" style="font-size: 15px">adult: ${adult}</span>
+                                           <span class="badge badge-pill badge-secondary" style="font-size: 15px">${runtime} minute</span>
+                                           <span class="badge badge-pill badge-light" style="font-size: 15px">${genre}</span>
+                                           <hr>
+                                           <p style="color: gray;">vote count : ${vote_count}</p>
+                                           <p style="color: gray;">vote average : ${vote_average}</p>
+                                           <p style="color: gray;">popularity : ${popularity}</p>
+                                           <h3 style="color: lightgray;">overview</h3>
+                                           <p style="color: gray;">${overview}</p>
+                                           <a href="${video_url}${key}" class="nav-link btn border border-dark text-muted">trailer<i class="fa fa-play"></i></a>
+                                      </div>`
+                $("#detail").append(detail);
+            }
+        });
+    }
+    function getKeyword(id){
+        $.ajax({
+            type: 'GET',
+            url: 'https://api.themoviedb.org/3/movie/'+ id +'/keywords?',
+            data: {"api_key": "a338932a06b8f07fb4c5638b91007531", 'language': 'ko-KR'},
+            success: function (response) {
+                let keywords = response['keywords']
+                //console.log(keyword)
+                let keywordsLength = keywords.length;
+                for (let index = 0; index<keywordsLength; index++){
+                    let keyword = keywords[index]['name']
+                    console.log(keyword)
+
+                    let keywordtag = `<span class="badge badge-pill badge-secondary" style="font-size: 23px;margin: 5px"># ${keyword}</span>`
+                    $("#tag").append(keywordtag);
+                }
+             }
+        });
+    }
+
+</script>
+<body>
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top navbar-background">
+        <a class="navbar-brand" href="#" onclick="onClickHome()"><font class="site-title-font">Movie<font style="font-size: 12px" class="site-title-font">Delivery</font></font></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickHome()">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickRate()">star</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickGenre()">rank</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="onClickMypage()">My page</a>
+        </li>
+      </ul>
+        <nav class="navbar navbar-dark">
+          <form class="form-inline">
+            <a class="btn btn-outline-danger" role="button" href="#" onclick="onClickSearch()">Search</a>
+          </form>
+        </nav>
+        <nav class="navbar navbar-dark">
+          <form class="form-inline">
+            <a class="btn btn-outline-light" role="button" href="#" onclick="onClickBtnLogOut()">Logout</a>
+          </form>
+        </nav>
+    </div>
+  </nav>
+</header>
+    <main>
+        <div class="container-fluid">
+            <div class="row" id="image">
+
+            </div>
+                <div class="movie-details">
+                    <div class="row col-12">
+                        <div class="col-xl-6">
+                            <div class="row" id="detail">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="tag" id="tag"></div>
+                <h2 class="display-4 ml-4 text-light random-movie-font">Similar Movie</h2>
+                <div class="row ml-4">
+                    <div class="random-movie" id="similarMovie">
+
+                    </div>
+                </div>
+            </div>
+    </main>
+</body>
+</html>

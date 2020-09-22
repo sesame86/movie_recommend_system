@@ -69,13 +69,13 @@
         .carousel-caption {
             position: absolute;
             right: 15%;
-            bottom: 40%;
+            bottom: 20%;
             left: 15%;
             z-index: 10;
             padding-top: 20px;
             padding-bottom: 20px;
             color: #fff;
-            text-align: center;
+            text-align: left;
             text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
         }
         .carousel-font {
@@ -90,13 +90,6 @@
             showMovieRank();
             popularMovie();
         });
-        function on() {
-          document.getElementById("overlay").style.display = "block";
-        }
-
-        function off() {
-          document.getElementById("overlay").style.display = "none";
-        }
         function onClickBtnLogOut() {
             $.ajax({
                 url: '/logout',
@@ -122,13 +115,16 @@
         function onClickMypage() {
             $(location).attr('href', '/mypage');
         }
+        function onClickdetail(id) {
+            location.href="/detail?movie="+id
+        }
         function showImage() {
             $.ajax({
                     type: 'GET',
                     url: 'https://api.themoviedb.org/3/movie/popular?',
                     data: {"api_key": "a338932a06b8f07fb4c5638b91007531", 'language':'ko-KR', 'page':1},
                     success: function (response) {
-                        //console.log(response)
+                        console.log(response)
                         let movies = response["results"]
                         let moviesLength = movies.length;
 
@@ -139,10 +135,12 @@
                             let poster_url = "https://image.tmdb.org/t/p/w1280/"
                             let base_url = "https://www.themoviedb.org/movie/"
                             let overview = movies[index]['overview']
+                            let poster_path = movies[index]['poster_path']
 
                             let image = `<img src="${poster_url}${backdrop_path}" class="d-block w-100" alt="...">
                                             <div class="carousel-caption">
-                                                 <a href="${base_url}${id}" class="carousel-font">${title}</a>
+                                                 <img src="${poster_url}${poster_path}" style="width: 10%;height: 10%;margin: 10px;box-shadow: 15px 15px 40px rgba(0, 0, 0, 1);">
+                                                 <a href="#" onclick="onClickdetail(${id})" class="carousel-font">${title}</a>
                                                  <p style="color: #cccccc">${overview}</p>
                                             </div>`;
                             $("#showimage01").append(image);
@@ -154,10 +152,12 @@
                             let poster_url = "https://image.tmdb.org/t/p/w1280/"
                             let base_url = "https://www.themoviedb.org/movie/"
                             let overview = movies[index]['overview']
+                            let poster_path = movies[index]['poster_path']
 
                             let image = `<img src="${poster_url}${backdrop_path}" class="d-block w-100" alt="...">
                                             <div class="carousel-caption">
-                                                 <a href="${base_url}${id}" class="carousel-font">${title}</a>
+                                                 <img src="${poster_url}${poster_path}" style="width: 10%;height: 10%;margin: 10px;box-shadow: 15px 15px 40px rgba(0, 0, 0, 1);">
+                                                 <a href="#" onclick="onClickdetail(${id})" class="carousel-font">${title}</a>
                                                  <p style="color: #cccccc">${overview}</p>
                                             </div>\`;`;
                             $("#showimage02").append(image);
@@ -169,10 +169,12 @@
                             let poster_url = "https://image.tmdb.org/t/p/w1280/"
                             let base_url = "https://www.themoviedb.org/movie/"
                             let overview = movies[index]['overview']
+                            let poster_path = movies[index]['poster_path']
 
                             let image = `<img src="${poster_url}${backdrop_path}" class="d-block w-100" alt="...">
                                             <div class="carousel-caption">
-                                                 <a href="${base_url}${id}" class="carousel-font">${title}</a>
+                                                 <img src="${poster_url}${poster_path}" style="width: 10%;height: 10%;margin: 10px;box-shadow: 15px 15px 40px rgba(0, 0, 0, 1);">
+                                                 <a href="#" onclick="onClickdetail(${id})" class="carousel-font">${title}</a>
                                                  <p style="color: #cccccc">${overview}</p>
                                             </div>\`;`;
                             $("#showimage03").append(image);
@@ -186,7 +188,7 @@
                     url: 'https://api.themoviedb.org/3/trending/movie/day?',
                     data: {"api_key": "a338932a06b8f07fb4c5638b91007531", 'language':'ko-KR', 'page':1},
                     success: function (response) {
-                        console.log(response)
+                        //console.log(response)
                         //if (response['result'] == 'success') {
                         //let movies = response['msg'];
                         let movies = response["results"]
@@ -257,7 +259,7 @@
                                                 </div>
                                                 <div class="movie-content">
                                                     <div class="movie-content-header">
-                                                        <a href="${base_url}${id}">
+                                                        <a href="#" onclick="onClickdetail(${id})">
                                                             <h3 class="movie-title movietitle-font">${title}</h3>
                                                         </a>
                                                         <div></div>
@@ -303,7 +305,7 @@
                                                 </div>
                                                 <div class="movie-content">
                                                     <div class="movie-content-header">
-                                                        <a href="${base_url}${id}">
+                                                        <a href="#" onclick="onClickdetail(${id})">
                                                             <h3 class="movie-title movietitle-font">${title}</h3>
                                                         </a>
                                                         <div></div>
@@ -369,7 +371,7 @@
         </nav>
         <nav class="navbar navbar-dark">
           <form class="form-inline">
-            <a class="btn btn-outline-light" role="button" onclick="onClickBtnLogOut()">Logout</a>
+            <a class="btn btn-outline-light" role="button" href="#" onclick="onClickBtnLogOut()">Logout</a>
           </form>
         </nav>
     </div>

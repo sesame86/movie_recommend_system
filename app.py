@@ -11,8 +11,12 @@ from pymongo import MongoClient
 app = Flask(__name__)
 app.secret_key = 'sparta'
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@15.164.233.104', 27017)
 db = client.MovieDB
+
+@app.route('/intro', methods=['GET'])
+def intro_page():
+    return render_template('intro.html')
 
 @app.route('/')
 def check():
@@ -67,8 +71,13 @@ def sign_up():
     user_id = request.form['userid_give']
     password = request.form['password_give']
     nickname = request.form['nickname_give']
+    user_list = list(db.user.find({}, {'user_id': False, 'password': False, 'nickname': False}))
 
-    db.user.insert_one({'user_id': user_id, 'password': password, 'nickname': nickname})
+    user_list_length = len(user_list)
+
+    primary_id = 3000 + user_list_length
+
+    db.user.insert_one({'user_id': user_id, 'password': password, 'nickname': nickname, 'primary_id': primary_id})
     return jsonify({'result': 'success'})
 
 
@@ -83,7 +92,12 @@ def rate_page():
 
 @app.route('/rating', methods=['POST'])
 def give_rate():
-    userid_recive = session['sessionID']
+    session_id = session['sessionID']
+    primary_id_list = list(db.user.find({'_id': ObjectId(session_id)},
+                                        {'_id': False, 'user_id': False, 'password': False, 'nickname': False}))
+    primary_id = primary_id_list[0]['primary_id']
+
+    primary_id_recive = primary_id
     # rate_receive 클라이언트가 준 rate 가져오기
     rate_receive = request.form['rate_give']
     # movieid_receive 클라이언트가 준 movieid 가져오기
@@ -91,12 +105,13 @@ def give_rate():
 
     # DB에 삽입할 rating 만들기
     rate = {
-        'userid':userid_recive,
-        'rate': rate_receive,
-        'tmdbid': tmdbid_receive
+        'userid': int(primary_id_recive),
+        'rate': float(rate_receive),
+        'tmdbid': int(tmdbid_receive)
     }
+
     # reviews에 review 저장하기
-    db.rate.insert_one(rate)
+    db.concat_rate.insert_one(rate)
     # 성공 여부 & 성공 메시지 반환
     return jsonify({'result': 'success', 'msg': '별점저장 완료😎'})
 
@@ -111,7 +126,12 @@ def my_page():
 
 @app.route('/mymovie', methods=['POST'])
 def create_movie():
-    userid_recive = session['sessionID']
+    session_id = session['sessionID']
+    primary_id_list = list(db.user.find({'_id': ObjectId(session_id)},
+                                        {'_id': False, 'user_id': False, 'password': False, 'nickname': False}))
+    primary_id = primary_id_list[0]['primary_id']
+
+    userid_recive = primary_id
 
     tmdbid_recieve = request.form['tmdbid_give']
     title_receive = request.form['title_give']
@@ -135,23 +155,16 @@ def create_movie():
 
 @app.route('/recommendMovie', methods=['GET'])
 def movie_recommend():
-    all_rating = pd.DataFrame(db.all_rating.find({}, {'_id': False}))
-    links = pd.DataFrame(db.links.find({}, {'_id': False}))
-    rate = pd.DataFrame(db.rate.find({}, {'_id': False}))
-
-    tmdbMovieRating = pd.merge(all_rating,links)
-    tmdbMovieRating = tmdbMovieRating[['userId','rating','tmdbId']]
-    tmdbMovieRating.rename(columns={'userId': 'userid', 'rating':'rate', 'tmdbId': 'tmdbid'}, inplace=True)
-
-    #tmdbMovieRating['userid'] = tmdbMovieRating['userid'].astype(object)
-    concatRateData = pd.concat([tmdbMovieRating, rate], axis=0)
+    concat_rate = pd.DataFrame(db.concat_rate.find({}, {'_id': False}))
+    #print(concat_rate)
 
     # pivote table
-    UM_matrix_ds = pd.pivot_table(tmdbMovieRating,index='userid', columns='tmdbid', values='rate')
-
+    UM_matrix_ds = pd.pivot_table(concat_rate,index='userid', columns='tmdbid', values='rate')
+    #print(UM_matrix_ds)
     def distance_euclidean(a, b):
         return 1 / (distance.euclidean(a, b) + 1)
 
+    # knn
     def nearest_neighbor_user(user, topN, simFunc):
         u1 = UM_matrix_ds.loc[user].dropna()
         ratedIndex = u1.index
@@ -212,11 +225,31 @@ def movie_recommend():
         return ret
 
     session_id = session['sessionID']
-    result = predictRating(1, nn=50, simFunc=distance_euclidean)
-    predict = pd.DataFrame(result, columns=['tmdbid', 'predicted_rating'])
-    predict = (predict.sort_values(['predicted_rating'], ascending=False)).values.tolist()
+    primary_id_list = list(db.user.find({'_id':ObjectId(session_id)},{'_id':False,'user_id':False,'password':False,'nickname':False}))
+    #print(primary_id_list)
+    primary_id = primary_id_list[0]['primary_id']
+    #print(primary_id)
 
-    return jsonify({'result': 'success', 'predict_list': predict})
+    #print(concat_rate[concat_rate['userid']==primary_id])
+    #print(nearest_neighbor_user(primary_id, 10, distance_euclidean))
+
+    result = predictRating(primary_id, nn=50, simFunc=distance_euclidean)
+    #print(result)
+    predict = pd.DataFrame(result, columns=['tmdbid', 'rate'])
+
+    my_rate = concat_rate[concat_rate['userid'] == primary_id].reset_index()
+    my_rate = my_rate[['tmdbid', 'rate']]
+
+    delete_list=[]
+    for i in predict.index:
+        for j in my_rate.index:
+            if predict['tmdbid'][i] == my_rate['tmdbid'][j]:
+                delete_list.append(i)
+
+    predict = predict.drop(delete_list,axis=0)
+    predict_data = (predict.sort_values(['rate'], ascending=False)).values.tolist()
+
+    return jsonify({'result': 'success', 'predict_list': predict_data})
 
 # @app.route('/myGenre', methods=['POST'])
 # def save_genre():
@@ -253,7 +286,10 @@ def movie_recommend():
 @app.route('/countGenre', methods=['GET'])
 def count_genre():
     session_id = session['sessionID']
-    genres = list(db.Mymovie_list.find({'userid':session_id}, {'_id': False, 'userid': False, 'tmdbid': False, 'title': False,
+    primary_id_list = list(db.user.find({'_id': ObjectId(session_id)},
+                                        {'_id': False, 'user_id': False, 'password': False, 'nickname': False}))
+    primary_id = primary_id_list[0]['primary_id']
+    genres = list(db.Mymovie_list.find({'userid': primary_id}, {'_id': False, 'userid': False, 'tmdbid': False, 'title': False,
                                                 'overview': False, 'nation': False,'release_date':False}))
     genre_list = []
     for i in genres:
@@ -266,7 +302,10 @@ def count_genre():
 @app.route('/countRating', methods=['GET'])
 def count_rate():
     session_id = session['sessionID']
-    rates = list(db.rate.find({'userid':session_id}, {'_id': False, 'userid':False, 'tmdbid':False}))
+    primary_id_list = list(db.user.find({'_id': ObjectId(session_id)},
+                                        {'_id': False, 'user_id': False, 'password': False, 'nickname': False}))
+    primary_id = primary_id_list[0]['primary_id']
+    rates = list(db.concat_rate.find({'userid': primary_id}, {'_id': False, 'userid':False, 'tmdbid':False}))
 
     rate_list = []
 
@@ -280,7 +319,10 @@ def count_rate():
 @app.route('/countNation', methods=['GET'])
 def count_nation():
     session_id = session['sessionID']
-    nations = list(db.Mymovie_list.find({'userid':session_id}, {'_id': False, 'userid':False, 'tmdbid':False, 'title':False, 'genre':False, 'overview':False,'release_date':False}))
+    primary_id_list = list(db.user.find({'_id': ObjectId(session_id)},
+                                        {'_id': False, 'user_id': False, 'password': False, 'nickname': False}))
+    primary_id = primary_id_list[0]['primary_id']
+    nations = list(db.Mymovie_list.find({'userid': primary_id}, {'_id': False, 'userid':False, 'tmdbid':False, 'title':False, 'genre':False, 'overview':False,'release_date':False}))
 
     nation_list = []
     for i in nations:
@@ -293,7 +335,10 @@ def count_nation():
 @app.route('/countYear', methods=['GET'])
 def count_year():
     session_id = session['sessionID']
-    release_date = list(db.Mymovie_list.find({'userid':session_id}, {'_id': False, 'userid':False, 'tmdbid':False, 'title':False, 'genre':False, 'overview':False,'nation':False}))
+    primary_id_list = list(db.user.find({'_id': ObjectId(session_id)},
+                                        {'_id': False, 'user_id': False, 'password': False, 'nickname': False}))
+    primary_id = primary_id_list[0]['primary_id']
+    release_date = list(db.Mymovie_list.find({'userid': primary_id}, {'_id': False, 'userid':False, 'tmdbid':False, 'title':False, 'genre':False, 'overview':False,'nation':False}))
 
     year_list = []
 
@@ -307,6 +352,11 @@ def count_year():
 @app.route('/search', methods=['GET'])
 def search_page():
     return render_template('search.html')
+
+@app.route('/detail', methods=['GET'])
+def detail_page():
+    return render_template('detail.html')
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -119,13 +118,16 @@
         function onClickMypage() {
             $(location).attr('href', '/mypage');
         }
+        function onClickdetail(id) {
+            location.href="/detail?movie="+id
+        }
         function showMovie(page) {
             let popular_movie_page;
-            for (popular_movie_page = 1; popular_movie_page < 20; popular_movie_page++) {
+            for (popular_movie_page = 1; popular_movie_page < 50; popular_movie_page++) {
                 $.ajax({
                     type: 'GET',
-                    url: 'https://api.themoviedb.org/3/movie/popular?api_key=a338932a06b8f07fb4c5638b91007531&language=ko-KR&page=1',
-                    data: {"api_key": "a338932a06b8f07fb4c5638b91007531", "page": popular_movie_page},
+                    url: 'https://api.themoviedb.org/3/discover/movie?',
+                    data: {"api_key": "a338932a06b8f07fb4c5638b91007531", "language":"ko-KR", "sort_by":"vote_count.desc", "page": popular_movie_page},
                     success: function (response) {
                         //console.log(response)
                         //if (response['result'] == 'success') {
@@ -146,7 +148,7 @@
                             let movieCard = `<div class="card card-size">
                                                         <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
                                                         <div class="card-body text-center">
-                                                        <a href="${base_url}${tmdbid}" target="_blank" class="link-font">${title}</a>
+                                                        <a href="#" onclick="onClickdetail(${tmdbid})" class="link-font">${title}</a>
                                                             <div class="starRev">
                                                               <span class="starR1" id="star1" value="0.5" onclick="rate_give(${tmdbid}, $(this).text())">0.5</span>
                                                               <span class="starR2" id="star2" value="1.0" onclick="rate_give(${tmdbid}, $(this).text())">1.0</span>
@@ -187,7 +189,6 @@
                 }
             });
         }
-
             function getMovieDetail(tmdbid) {
             //console.log(tmdbid)
                 $.ajax({
@@ -218,54 +219,11 @@
                 data: {tmdbid_give: tmdbid, title_give: title, genre_give: genre, overview_give:overview, nation_give:nation, release_date_give:release_date},
                 success: function (response) {
                     if (response["result"] == "success") {
-                        window.location.reload();
+                        //window.location.reload();
                     }
                 }
             });
         }
-
-        {#function getGenreName() {#}
-        {#        $.ajax({#}
-        {#            type:"GET",#}
-        {#            url: "https://api.themoviedb.org/3/genre/movie/list?",#}
-        {#            data: {'api_key':'a338932a06b8f07fb4c5638b91007531','language':'ko-KR'},#}
-        {#            success: function (response) {#}
-        {#                let genres = response["genres"];#}
-        {#                let gernesLength = genres.length;#}
-        {#                console.log(genres)#}
-        {#                for (let index = 0; index < gernesLength; index++){#}
-        {#                    let genre = genres[index]['name'];#}
-        {#                    save_genre(genre);#}
-        {#                }#}
-        {#            }#}
-        {#        })#}
-        {#    }#}
-        {#    function save_genre(genre) {#}
-        {#        $.ajax({#}
-        {#            type: "POST",#}
-        {#            url: "/myGenre",#}
-        {#            data: {'genre_give': genre},#}
-        {#            success: function (response) {#}
-        {#                if (response["result"] == "success") {#}
-        {#                    alert(response["msg"]);#}
-        {#                    window.location.reload();#}
-        {#                }#}
-        {#            }#}
-        {#        });#}
-        {#    }#}
-
-        {#function countGenre(genre){#}
-        {#    $.ajax({#}
-        {#        type: "POST",#}
-        {#        url: "/countGenre",#}
-        {#        data: {genre_give: genre},#}
-        {#        success: function (response) {#}
-        {#            if (response["result"] == "success") {#}
-        {#                alert(response["msg"]);#}
-        {#                window.location.reload();#}
-        {#            }#}
-        {#        }#}
-        {#    });#}
 
     </script>
 
@@ -301,7 +259,7 @@
         </nav>
         <nav class="navbar navbar-dark">
           <form class="form-inline">
-            <a class="btn btn-outline-light" role="button" onclick="onClickBtnLogOut()">Logout</a>
+            <a class="btn btn-outline-light" role="button" href="#" onclick="onClickBtnLogOut()">Logout</a>
           </form>
         </nav>
     </div>

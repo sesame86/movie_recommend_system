@@ -107,7 +107,9 @@
         function onClickMypage() {
             $(location).attr('href', '/mypage');
         }
-
+        function onClickdetail(id) {
+            location.href="/detail?movie="+id
+        }
         function searchMovie(search_input) {
             $('#cards-box').empty()
             let movietitle = $('#search_input').val();
@@ -126,7 +128,7 @@
                             let id = movies[index]['id'];
                             let title = movies[index]['title'];
                             let popularity = movies[index]['popularity'];
-                            let vote_count = movies[index]['vote_count'];
+                            let vote_average = movies[index]['vote_average'];
                             let release_date = movies[index]['release_date']
                             let poster_path = movies[index]['poster_path']
                             let poster_url = "https://image.tmdb.org/t/p/w1280/"
@@ -137,7 +139,7 @@
                                                 </div>
                                                 <div class="movie-content">
                                                     <div class="movie-content-header">
-                                                        <a href="${base_url}${id}">
+                                                        <a href="#" onclick="onClickdetail(${id})">
                                                             <h3 class="movie-title movietitle-font">${title}</h3>
                                                         </a>
                                                         <div></div>
@@ -152,8 +154,8 @@
                                                             <span>${popularity}</span>
                                                         </div>
                                                         <div class="info-section">
-                                                            <label>vote_count</label>
-                                                            <span>${vote_count}</span>
+                                                            <label>vote_average</label>
+                                                            <span>${vote_average}</span>
                                                         </div>
                                                     </div>
                                                 </div>`;
@@ -196,7 +198,7 @@
         </nav>
         <nav class="navbar navbar-dark">
           <form class="form-inline">
-            <a class="btn btn-outline-light" role="button" onclick="onClickBtnLogOut()">Logout</a>
+            <a class="btn btn-outline-light" role="button" href="#" onclick="onClickBtnLogOut()">Logout</a>
           </form>
         </nav>
     </div>
