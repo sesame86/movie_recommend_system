@@ -11,7 +11,7 @@ from pymongo import MongoClient
 app = Flask(__name__)
 app.secret_key = 'sparta'
 
-client = MongoClient('mongodb://test:test@15.164.233.104', 27017)
+client = MongoClient('mongodb://test:test@54.180.153.202', 27017)
 db = client.MovieDB
 
 @app.route('/intro', methods=['GET'])
@@ -220,7 +220,8 @@ def movie_recommend():
                 sim = neighbor_dic.get(v[0], 0)
                 jsum += sim
                 wsum += (v[1] * sim)
-            ret.append([movieId, wsum / jsum])
+                rate = wsum / jsum
+            ret.append([movieId, format(rate, '.2f')])
 
         return ret
 
