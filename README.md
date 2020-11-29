@@ -42,7 +42,7 @@ https://grouplens.org/datasets/movielens/latest/
 - 사용자 기반 협업 필터링은 사용자가 평가한 영화 평점과 다른 사용자의 영화평점간의 유사도를 비교하여 유사도가 높은 사용자가 높게 평가한 영화를 사용자에게 추천해주는 알고리즘 입니다.
 
 > 주요 코드
-- knn 알고리즘
+- 유사도가 높은 사용자 찾기
 <pre><code>
     def nearest_neighbor_user(user, topN, simFunc):
         u1 = UM_matrix_ds.loc[user].dropna()
