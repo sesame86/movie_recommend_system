@@ -164,51 +164,49 @@ def movie_recommend():
     def distance_euclidean(a, b):
         return 1 / (distance.euclidean(a, b) + 1)
 
-    # knn
+    # knn 알고리즘
     def nearest_neighbor_user(user, topN, simFunc):
         u1 = UM_matrix_ds.loc[user].dropna()
         ratedIndex = u1.index
         nn = {}
 
-        ## Brote Force Compute
+        ## 브루트 포스 알고리즘
+        #조합 가능한 모든 문자열을 하나씩 대입해 보는 방식
         for uid, row in UM_matrix_ds.iterrows():
             interSectionU1 = []
             interSectionU2 = []
             if uid == user:
                 continue
-
             for i in ratedIndex:
                 if False == math.isnan(row[i]):
                     interSectionU1.append(u1[i])
                     interSectionU2.append(row[i])
             interSectionLen = len(interSectionU1)
 
-            ## At least 3 intersection items
+            ## 최소 3개 교차한 아이템
             if interSectionLen < 3:
                 continue
 
-            ## similarity functon
+            ## 유사도 함수
             sim = simFunc(interSectionU1, interSectionU2)
 
             if math.isnan(sim) == False:
                 nn[uid] = sim
 
-        ## top N returned
+        ## top 순위 대로 정렬
         return sorted(nn.items(), key=itemgetter(1), reverse=True)[:(topN + 1)]
-        # return sorted(nn.items(),key=itemgetter(1))[:-(topN+1):-1]
 
+    #예상 점수 구하기
     def predictRating(userid, nn=50, simFunc=distance_euclidean):
 
-        ## neighboorhood
+        ## knn함수
         neighbor = nearest_neighbor_user(userid, nn, simFunc)
-        # userid : similarity 의 dictionary
 
-        neighbor_id = [id for id, sim in neighbor]
         # 비슷한 유사도를 보이는 유저 리스트
+        neighbor_id = [id for id, sim in neighbor]
 
         ## 4개이상이 NaN인 경우 제거
         neighbor_movie = UM_matrix_ds.loc[neighbor_id].dropna(1, how='all', thresh=4)
-        # 유저id x 영화id 의 DataFrame. 단, column의 NaN이 4개 이상인 경우 삭제했음.
 
         neighbor_dic = (dict(neighbor))
         ret = []  # ['movieId', 'predictedRate']
@@ -241,6 +239,7 @@ def movie_recommend():
     my_rate = concat_rate[concat_rate['userid'] == primary_id].reset_index()
     my_rate = my_rate[['tmdbid', 'rate']]
 
+    #내가 본 영화 리스트에 추천 된 영화가 있으면 삭제
     delete_list=[]
     for i in predict.index:
         for j in my_rate.index:
