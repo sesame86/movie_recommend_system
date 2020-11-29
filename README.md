@@ -1,12 +1,14 @@
-<img src="https://postfiles.pstatic.net/MjAyMDA4MjVfMjY3/MDAxNTk4MzMzMTMzMzYz.TecBsMZiaVib0wlGrjzDyqGKUVHQFuK7ByVss1u_pEQg.5OjcSo9t3u5bxnj8zyp5qfDm102rGaX7Wp1uB-_Pm2sg.JPEG.kyy8006/logo.jpg?type=w773" height="100"/>
+![main_page](/static/main_page.PNG)
 
 # 영화 추천 시스템(collarborative filtering)
-#### 기간
+> 기간
 - 영화 추천 알고리즘 : 2020/03~2020/07
 - 웹사이트 구현 : 2020/7~ 2020/8
 
 > 프로젝트 간략 소개 한 문장 
 - 사용자 기반 협업 필터링을 이용한 영화 추천 사이트
+
+
 
 #### 실행 환경
 - pycharm
@@ -18,12 +20,16 @@
 #### 사용한 데이터
 - tmdb open api
     - 웹페이지 구현에 이용
+    
 https://developers.themoviedb.org/3/getting-started/introduction
+
 - MovieLens Latest Datasets
 
-![img1](/static/use_data_sample.PNG)
+![use_data_sample](/static/use_data_sample.PNG)
+
     - links로 합쳐서 tmdbid를 가져와서 사용
     - mongodb에 저장후 비교할 사용자 데이터로 이용
+    
 https://grouplens.org/datasets/movielens/latest/
 
 
