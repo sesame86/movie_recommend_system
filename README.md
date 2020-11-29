@@ -20,15 +20,16 @@ http://moviedelivery.shop/intro
 
 > 사용한 데이터
 - tmdb open api
-    - 웹페이지 구현에 이용
+웹페이지 구현에 이용
     
 https://developers.themoviedb.org/3/getting-started/introduction
 
 - MovieLens Latest Datasets
 
 ![use_data_sample](/static/use_data_sample.PNG)
-    - links로 합쳐서 tmdbid를 가져와서 사용
-    - mongodb에 저장후 비교할 사용자 데이터로 이용
+-links로 합쳐서 tmdbid를 가져와서 사용
+
+-mongodb에 저장후 비교할 사용자 데이터로 이용
     
 https://grouplens.org/datasets/movielens/latest/
 
