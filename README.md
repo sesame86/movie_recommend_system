@@ -107,3 +107,6 @@ https://grouplens.org/datasets/movielens/latest/
 
 ![use_data_sample](/static/평가.jpg)
 
+## 결과물
+![use_data_sample](/static/my_page1.PNG)
+![use_data_sample](/static/my_page2.PNG)
