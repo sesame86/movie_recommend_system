@@ -22,6 +22,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
 
     <title>Movie delivery</title>
 
@@ -87,6 +88,16 @@
             width: 200px;
             height: auto;
         }
+        .movie-title-font {
+            font-size: 20px;
+            font-family: 'Do Hyeon', sans-serif;
+            color: black;
+        }
+        .movie-title-font:hover{
+            text-shadow: 0px 0px 15px gray;
+            text-decoration: none;
+            color: #000000;
+        }
     </style>
 
     <script>
@@ -148,7 +159,7 @@
                             let movieCard = `<div class="card card-size">
                                                         <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
                                                         <div class="card-body text-center">
-                                                        <a href="#" onclick="onClickdetail(${tmdbid})" class="link-font">${title}</a>
+                                                        <a href="#" onclick="onClickdetail(${tmdbid})" class="movie-title-font">${title}</a>
                                                             <div class="starRev">
                                                               <span class="starR1" id="star1" value="0.5" onclick="rate_give(${tmdbid}, $(this).text())">0.5</span>
                                                               <span class="starR2" id="star2" value="1.0" onclick="rate_give(${tmdbid}, $(this).text())">1.0</span>
@@ -212,6 +223,7 @@
                     }
                 })
             }
+
             function give_movie_detail(tmdbid,title,genre,overview,nation,release_date) {
             $.ajax({
                 type: "POST",
@@ -224,7 +236,6 @@
                 }
             });
         }
-
     </script>
 
 </head>

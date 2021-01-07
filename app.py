@@ -123,6 +123,62 @@ def genre_page():
 def my_page():
     return render_template('mypage.html')
 
+@app.route('/selectMovie', methods=['GET'])
+def select_movie_page():
+    return render_template('selectMovie.html')
+
+@app.route('/read_movie', methods=['GET'])
+def read_movie():
+    session_id = session['sessionID']
+    primary_id_list = list(db.user.find({'_id': ObjectId(session_id)},
+                                        {'_id': False, 'user_id': False, 'password': False, 'nickname': False}))
+    primary_id = primary_id_list[0]['primary_id']
+    select_movie_list = list(
+        db.concat_rate.find({'userid': primary_id}, {'_id': False, 'userid': False}))
+
+    return jsonify({'result': 'success', 'select_movie_list': select_movie_list})
+
+@app.route('/delete_movie', methods=['POST'])
+def delete_movie():
+    session_id = session['sessionID']
+    primary_id_list = list(db.user.find({'_id': ObjectId(session_id)},
+                                        {'_id': False, 'user_id': False, 'password': False, 'nickname': False}))
+    primary_id = primary_id_list[0]['primary_id']
+    #print(primary_id)
+
+    id_receive = request.form['id_give']
+
+    db.Mymovie_list.delete_one({'userid': primary_id, 'tmdbid': id_receive})
+    int_id = int(id_receive)
+    db.concat_rate.delete_one({'userid': primary_id, 'tmdbid': int_id})
+    return jsonify({'result': 'success'})
+
+@app.route('/update_movie', methods=['POST'])
+def update_movie():
+    session_id = session['sessionID']
+    primary_id_list = list(db.user.find({'_id': ObjectId(session_id)},
+                                        {'_id': False, 'user_id': False, 'password': False, 'nickname': False}))
+    primary_id = primary_id_list[0]['primary_id']
+
+    primary_id_recive = primary_id
+    # rate_receive 클라이언트가 준 rate 가져오기
+    rate_receive = request.form['rate_give']
+    # movieid_receive 클라이언트가 준 movieid 가져오기
+    tmdbid_receive = request.form['tmdbid_give']
+
+    # DB에 삽입할 rating 만들기
+    rate = {
+        'userid': int(primary_id_recive),
+        'rate': float(rate_receive),
+        'tmdbid': int(tmdbid_receive)
+    }
+    #저장되어있던 별점 삭제
+    int_id = int(tmdbid_receive)
+    db.concat_rate.delete_one({'userid': primary_id, 'tmdbid': int_id})
+    # 새로운 별점 저장
+    db.concat_rate.insert_one(rate)
+    # 성공 여부 & 성공 메시지 반환
+    return jsonify({'result': 'success', 'msg': '별점 update 완료😎'})
 
 @app.route('/mymovie', methods=['POST'])
 def create_movie():
@@ -164,51 +220,49 @@ def movie_recommend():
     def distance_euclidean(a, b):
         return 1 / (distance.euclidean(a, b) + 1)
 
-    # knn
+    # knn 알고리즘
     def nearest_neighbor_user(user, topN, simFunc):
         u1 = UM_matrix_ds.loc[user].dropna()
         ratedIndex = u1.index
         nn = {}
 
-        ## Brote Force Compute
+        ## 브루트 포스 알고리즘
+        #조합 가능한 모든 문자열을 하나씩 대입해 보는 방식
         for uid, row in UM_matrix_ds.iterrows():
             interSectionU1 = []
             interSectionU2 = []
             if uid == user:
                 continue
-
             for i in ratedIndex:
                 if False == math.isnan(row[i]):
                     interSectionU1.append(u1[i])
                     interSectionU2.append(row[i])
             interSectionLen = len(interSectionU1)
 
-            ## At least 3 intersection items
+            ## 최소 3개 교차한 아이템
             if interSectionLen < 3:
                 continue
 
-            ## similarity functon
+            ## 유사도 함수
             sim = simFunc(interSectionU1, interSectionU2)
 
             if math.isnan(sim) == False:
                 nn[uid] = sim
 
-        ## top N returned
+        ## top 순위 대로 정렬
         return sorted(nn.items(), key=itemgetter(1), reverse=True)[:(topN + 1)]
-        # return sorted(nn.items(),key=itemgetter(1))[:-(topN+1):-1]
 
+    #예상 점수 구하기
     def predictRating(userid, nn=50, simFunc=distance_euclidean):
 
-        ## neighboorhood
+        ## knn함수
         neighbor = nearest_neighbor_user(userid, nn, simFunc)
-        # userid : similarity 의 dictionary
 
-        neighbor_id = [id for id, sim in neighbor]
         # 비슷한 유사도를 보이는 유저 리스트
+        neighbor_id = [id for id, sim in neighbor]
 
         ## 4개이상이 NaN인 경우 제거
         neighbor_movie = UM_matrix_ds.loc[neighbor_id].dropna(1, how='all', thresh=4)
-        # 유저id x 영화id 의 DataFrame. 단, column의 NaN이 4개 이상인 경우 삭제했음.
 
         neighbor_dic = (dict(neighbor))
         ret = []  # ['movieId', 'predictedRate']
@@ -216,6 +270,7 @@ def movie_recommend():
         # 각 column을 순회한다. key : userid, column : movieid, value : rating
         for movieId, row in neighbor_movie.iteritems():
             jsum, wsum = 0, 0
+            rate = 0
             for v in row.dropna().iteritems():
                 sim = neighbor_dic.get(v[0], 0)
                 jsum += sim
@@ -241,6 +296,7 @@ def movie_recommend():
     my_rate = concat_rate[concat_rate['userid'] == primary_id].reset_index()
     my_rate = my_rate[['tmdbid', 'rate']]
 
+    #내가 본 영화 리스트에 추천 된 영화가 있으면 삭제
     delete_list=[]
     for i in predict.index:
         for j in my_rate.index:
@@ -252,38 +308,6 @@ def movie_recommend():
 
     return jsonify({'result': 'success', 'predict_list': predict_data})
 
-# @app.route('/myGenre', methods=['POST'])
-# def save_genre():
-#     genre_receive = request.form['genre_give']
-#
-#     # DB에 삽입할 rating 만들기
-#     MyGenre_list = {
-#         'genre':genre_receive,
-#         'like':0
-#     }
-#     # reviews에 review 저장하기
-#     db.MyGenre_list.insert_one(MyGenre_list)
-#     # 성공 여부 & 성공 메시지 반환
-#     return jsonify({'result': 'success'})
-
-# @app.route('/countGenre', methods=['POST'])
-# def count_genre():
-#     genre_receive = request.form['genre_give']
-#
-#     genre = db.MyGenre_list.find_one({'genre': genre_receive})
-#
-#     new_like = genre['like'] + 1
-#
-#     db.MyGenre_list.update_one({'genre': genre_receive}, {'$set': {'like': new_like}})
-#
-#     return jsonify({'result': 'success'})
-#
-#
-# @app.route('/countGenre', methods=['GET'])
-# def genre_data():
-#     genre = list(db.MyGenre_list.find({}, {'_id': False}))
-#
-#     return jsonify({'result': 'success', 'genre_list': genre})
 @app.route('/countGenre', methods=['GET'])
 def count_genre():
     session_id = session['sessionID']

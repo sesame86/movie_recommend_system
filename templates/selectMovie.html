@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- 부트스트랩 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+
+    <title>Movie Delivery</title>
+
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .site-title-font {
+            color: red;
+            font-family: 'Srisakdi', cursive;
+            font-size: 27px;
+        }
+        .navbar-background{
+            background-color: black;
+            opacity: 80%;
+        }
+        .jumbotron-style{
+            border-radius: 15px;
+            font-family: 'Gamja Flower', cursive;
+            background-color: lightgoldenrodyellow;
+            padding: 30px;
+        }
+        .jumbo-font{
+            font-family: 'Gamja Flower', cursive;
+            font-size: 30px;
+        }
+        .size {
+            width: auto;
+            height: 800px;
+        }
+        .wrap {
+            width: 1100px;
+            margin: auto;
+            margin-top: 50px;
+        }
+        .background {
+            background-color: black;
+        }
+        body{
+            margin-top:20px;
+            background:#FAFAFA;
+        }
+        .movie-title-font {
+            font-size: 20px;
+            font-family: 'Do Hyeon', sans-serif;
+            color: black;
+        }
+        .movie-title-font:hover{
+            text-shadow: 0px 0px 15px gray;
+            text-decoration: none;
+            color: #000000;
+        }
+        .starR1{
+            background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat -52px 0;
+            background-size: auto 100%;
+            width: 15px;
+            height: 30px;
+            float:left;
+            text-indent: -9999px;
+            cursor: pointer;
+        }
+        .starR2{
+            background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat right 0;
+            background-size: auto 100%;
+            width: 15px;
+            height: 30px;
+            float:left;
+            text-indent: -9999px;
+            cursor: pointer;
+        }
+        .starR1.on{background-position:0 0;}
+        .starR2.on{background-position:-15px 0;}
+
+        .card-size{
+            margin: 10px;
+            width: 200px;
+            height: auto;
+        }
+        .btn:hover{
+            box-shadow: 0px 0px 15px #000;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function(){
+            read_movie();
+        });
+
+        function onClickBtnLogOut() {
+            $.ajax({
+                url: '/logout',
+                method: 'POST',
+                data: {},
+                success: function (response) {
+                    $(location).attr('href', '/');
+                }
+            })
+        }
+
+        function onClickHome() {
+            $(location).attr('href', '/');
+        }
+
+        function onClickRate() {
+            $(location).attr('href', '/rating');
+        }
+
+        function onClickGenre() {
+            $(location).attr('href', '/genre');
+        }
+
+        function onClickSearch() {
+            $(location).attr('href', '/search');
+        }
+
+        function onClickMypage() {
+            $(location).attr('href', '/mypage');
+        }
+        function onClickdetail(id) {
+            location.href="/detail?movie="+id
+        }
+        function read_movie() {
+            $.ajax({
+                type: "GET",
+                url: "/read_movie",
+                async: false,
+                data: {},
+                success: function (response) {
+                    let movies = response['select_movie_list']
+                    //console.log(movies);
+                    let moviesLength = movies.length;
+                    for (let index = 0; index < moviesLength; index++) {
+                        let id = movies[index]['tmdbid'];
+                        let rate = movies[index]['rate'];
+                        make_card(id, rate);
+                    }
+                }
+            });
+        }
+        function make_card(id, rate) {
+            $.ajax({
+                type: 'GET',
+                url: 'https://api.themoviedb.org/3/movie/' + id + '?',
+                async: false,
+                data: {"api_key": "a338932a06b8f07fb4c5638b91007531", 'language': 'ko-KR'},
+                success: function (response) {
+                    let movies = response;
+                    //console.log(response)
+
+                    let title = movies['title'];
+                    let poster_path = movies['poster_path']
+                    let poster_url = "https://image.tmdb.org/t/p/w1280/"
+
+                    let movieCard = `<div class="card card-size">
+                                                        <img class="card-img-top" src="${poster_url}${poster_path}" alt="Card image cap">
+                                                        <div class="card-body text-center">
+                                                        <a href="#" onclick="onClickdetail(${id})" class="movie-title-font">${title}</a>
+                                                        <h5 class="rate-score">${rate}점
+
+                                                            <div class="starRev">
+                                                              <span class="starR1" id="star1" value="0.5" onclick="update_movie(${id}, $(this).text())">0.5</span>
+                                                              <span class="starR2" id="star2" value="1.0" onclick="update_movie(${id}, $(this).text())">1.0</span>
+                                                              <span class="starR1" id="star3" value="1.5" onclick="update_movie(${id}, $(this).text())">1.5</span>
+                                                              <span class="starR2" id="star4" value="2.0" onclick="update_movie(${id}, $(this).text())">2.0</span>
+                                                              <span class="starR1" id="star5" value="2.5" onclick="update_movie(${id}, $(this).text())">2.5</span>
+                                                              <span class="starR2" id="star6" value="3.0" onclick="update_movie(${id}, $(this).text())">3.0</span>
+                                                              <span class="starR1" id="star7" value="3.5" onclick="update_movie(${id}, $(this).text())">3.5</span>
+                                                              <span class="starR2" id="star8" value="4.0" onclick="update_movie(${id}, $(this).text())">4.0</span>
+                                                              <span class="starR1" id="star9" value="4.5" onclick="update_movie(${id}, $(this).text())">4.5</span>
+                                                              <span class="starR2" id="star10" value="5.0" onclick="update_movie(${id}, $(this).text())">5.0</span>
+                                                            </div>
+                                                            <div style="margin-bottom: 0px">
+                                                            <a href="#" onclick="show_update_btn()" style="color: black;text-decoration: none">
+                                                                🔄
+                                                            </a>
+                                                            <a href="#" onclick="delete_movie()" style="text-decoration: none">❌
+                                                            </a></h5>
+                                                    </div>`;
+                    $('.starRev').hide();
+
+                    $("#cards-box").append(movieCard);
+                    $('.starRev span').click(function () {
+                        $(this).parent().children('span').removeClass('on');
+                        $(this).addClass('on').prevAll('span').addClass('on');
+                        return false;
+                    });
+                }
+            });
+        }
+        function show_update_btn(){
+            $('.starRev').toggle();
+        }
+        function update_movie(tmdbid, value) {
+            //alert('ID = ' + id +' rate = '+ value);
+            $.ajax({
+                type: "POST",
+                url: "/update_movie",
+                data: {rate_give: value, tmdbid_give: tmdbid},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+        function delete_movie(id) {
+                // 1. 서버에 1) POST 방식으로, 2) /api/delete 라는 url에, 3) name_give라는 이름으로 name을 전달합니다.
+                // 참고) POST 방식이므로 data: {'name_give': name} 과 같은 양식이 되어야합니다!
+                $.ajax({
+                    type: "POST",
+                    url: "/delete_movie",
+                    data: {'id_give': id},
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            // 2. '삭제 완료! 안녕!' 얼럿을 띄웁니다.
+                            alert('삭제 완료! 안녕!')
+                            // 3. 변경된 정보를 반영하기 위해 새로고침합니다.
+                            window.location.reload()
+                        }
+                    }
+                });
+            }
+    </script>
+</head>
+
+<body class="background">
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top navbar-background">
+        <a class="navbar-brand" href="#" onclick="onClickHome()"><font class="site-title-font">Movie<font style="font-size: 12px" class="site-title-font">Delivery</font></font></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="onClickHome()">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="onClickRate()">star</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="onClickGenre()">rank</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#" onclick="onClickMypage()">My page</a>
+                </li>
+            </ul>
+            <nav class="navbar navbar-dark">
+                <form class="form-inline">
+                    <a class="btn btn-outline-danger" role="button" href="#" onclick="onClickSearch()">Search</a>
+                </form>
+            </nav>
+            <nav class="navbar navbar-dark">
+                <form class="form-inline">
+                    <a class="btn btn-outline-light" role="button" href="#" onclick="onClickBtnLogOut()">Logout</a>
+                </form>
+            </nav>
+        </div>
+    </nav>
+</header>
+<div class="wrap">
+    <div class="jumbotron jumbotron-style">
+        <h1 class="display-4">내가 평점을 준 영화🌟</h1>
+    </div>
+    <div class="row mb-5" id="cards-box">
+
+    </div>
+</div>
+</body>
+</html>
