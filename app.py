@@ -167,6 +167,7 @@ def update_movie():
 
     #저장되어있던 별점 update
     int_id = int(tmdbid_receive)
+    float_rate = float(rate_receive)
     db.concat_rate.update_one({'userid': primary_id, 'tmdbid': int_id}, {"$set": {"rate": rate_receive}})
 
     # 성공 여부 & 성공 메시지 반환
@@ -207,7 +208,7 @@ def movie_recommend():
     #print(concat_rate)
 
     # pivote table
-    UM_matrix_ds = pd.pivot_table(concat_rate,index='userid', columns='tmdbid', values='rate')
+    UM_matrix_ds = pd.pivot_table(concat_rate, index='userid', columns='tmdbid', values='rate')
     #print(UM_matrix_ds)
     def distance_euclidean(a, b):
         return 1 / (distance.euclidean(a, b) + 1)
@@ -325,7 +326,6 @@ def count_rate():
     rates = list(db.concat_rate.find({'userid': primary_id}, {'_id': False, 'userid':False, 'tmdbid':False}))
 
     rate_list = []
-
     for i in rates:
         for index, rate in i.items():
             rate_list.append(rate)

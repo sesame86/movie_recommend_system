@@ -368,6 +368,7 @@
                 url: "/countRating",
                 data: {},
                 success: function (response) {
+                    console.log(response)
                     let result = response['rate_list'];
                     //console.log(result)
                     key = Object.keys(result);
