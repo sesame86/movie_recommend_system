@@ -160,24 +160,15 @@ def update_movie():
                                         {'_id': False, 'user_id': False, 'password': False, 'nickname': False}))
     primary_id = primary_id_list[0]['primary_id']
 
-    primary_id_recive = primary_id
     # rate_receive 클라이언트가 준 rate 가져오기
     rate_receive = request.form['rate_give']
     # movieid_receive 클라이언트가 준 movieid 가져오기
     tmdbid_receive = request.form['tmdbid_give']
 
-    # DB에 삽입할 rating 만들기
-    rate = {
-        'userid': int(primary_id_recive),
-        'rate': float(rate_receive),
-        'tmdbid': int(tmdbid_receive)
-    }
-    #저장되어있던 별점 삭제
+    #저장되어있던 별점 update
     int_id = int(tmdbid_receive)
-    #db.concat_rate.delete_one({'userid': primary_id, 'tmdbid': int_id})
-    db.concat_rate.update_one({'userid': primary_id, 'tmdbid': int_id})
-    # 새로운 별점 저장
-    #db.concat_rate.insert_one(rate)
+    db.concat_rate.update_one({'userid': primary_id, 'tmdbid': int_id}, {"$set": {"rate": rate_receive}})
+
     # 성공 여부 & 성공 메시지 반환
     return jsonify({'result': 'success', 'msg': '별점 update 완료😎'})
 
