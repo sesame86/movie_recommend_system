@@ -174,9 +174,10 @@ def update_movie():
     }
     #저장되어있던 별점 삭제
     int_id = int(tmdbid_receive)
-    db.concat_rate.delete_one({'userid': primary_id, 'tmdbid': int_id})
+    #db.concat_rate.delete_one({'userid': primary_id, 'tmdbid': int_id})
+    db.concat_rate.update_one({'userid': primary_id, 'tmdbid': int_id})
     # 새로운 별점 저장
-    db.concat_rate.insert_one(rate)
+    #db.concat_rate.insert_one(rate)
     # 성공 여부 & 성공 메시지 반환
     return jsonify({'result': 'success', 'msg': '별점 update 완료😎'})
 
