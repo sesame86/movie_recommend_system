@@ -328,8 +328,10 @@ def count_rate():
     rate_list = []
     for i in rates:
         for index, rate in i.items():
+            #print(rate)
             rate_list.append(rate)
     rate_count = collections.Counter(rate_list)
+    #print(rate_count)
 
     return jsonify({'result': 'success', 'rate_list': rate_count})
 

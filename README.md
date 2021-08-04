@@ -7,6 +7,7 @@ http://moviedelivery.shop/intro
 - 가입하지 않고 보기
     - id : hello@naver.com
     - password : hello
+  <br>현재 aws기간 지나서 접근 불가능! 곧 다시 호스팅할 예정
 > 기간
 - 영화 추천 알고리즘 : 2020/03~2020/07
 - 웹사이트 구현 : 2020/7~ 2020/8
