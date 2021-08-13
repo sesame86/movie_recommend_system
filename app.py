@@ -51,7 +51,6 @@ def login():
 
     user = db.user.find_one({'user_id': user_id, 'password': password})
 
-
     if user is not None:
         # 세션을 생성하는데
         # 세션에 'sessionID'라는 변수에
