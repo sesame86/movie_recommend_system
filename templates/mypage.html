@@ -9,6 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
 
     <!-- 부트스트랩 -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -37,33 +38,6 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
     <style>
-        * {
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-
-        .site-title-font {
-            color: red;
-            font-family: 'Srisakdi', cursive;
-            font-size: 27px;
-        }
-        .navbar-background{
-            background-color: black;
-            opacity: 80%;
-        }
-        .jumbotron-style{
-            border-radius: 15px;
-            font-family: 'Gamja Flower', cursive;
-            padding: 30px;
-        }
-        .jumbo-font{
-            font-family: 'Gamja Flower', cursive;
-            font-size: 30px;
-        }
-        .size {
-            width: auto;
-            height: 800px;
-        }
-
         .wrap {
             width: 1100px;
             margin: auto;
@@ -73,13 +47,6 @@
             width: 1000px;
             margin: auto;
             margin-top: 50px;
-        }
-        .background {
-            background-color: black;
-        }
-        body{
-            margin-top:20px;
-            background:#FAFAFA;
         }
         .card-size{
             margin: 10px;
@@ -96,7 +63,6 @@
             color: #9FC93C;
             text-decoration: none;
         }
-
     </style>
 
     <script>
@@ -206,7 +172,7 @@
 <body class="background">
 <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top navbar-background">
-        <a class="navbar-brand" href="#" onclick="onClickHome()"><font class="site-title-font">Movie<font style="font-size: 12px" class="site-title-font">Delivery</font></font></a>
+        <a class="navbar-brand" href="#" onclick="onClickHome()"><img src="/static/logo3.JPG" alt="User Icon"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

@@ -11,7 +11,8 @@ from pymongo import MongoClient
 app = Flask(__name__)
 app.secret_key = 'sparta'
 
-client = MongoClient('mongodb://test:test@54.180.153.202', 27017)
+# client = MongoClient('mongodb://test:test@54.180.153.202', 27017)
+client = MongoClient('localhost', 27017)
 db = client.MovieDB
 
 @app.route('/intro', methods=['GET'])

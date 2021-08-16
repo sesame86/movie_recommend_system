@@ -1,0 +1,53 @@
+
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .navbar-background{
+            background-color: black;
+            opacity: 80%;
+        }
+        .jumbotron-style{
+            border-radius: 15px;
+            font-family: 'Gamja Flower', cursive;
+            padding: 30px;
+        }
+        .jumbo-font{
+            font-family: 'Gamja Flower', cursive;
+            font-size: 30px;
+        }
+                .ranking-font{
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 20px;
+            color:white;
+            margin: 10px;
+        }
+        .size {
+            width: auto;
+            height: 800px;
+        }
+        .background {
+            background-color: black;
+        }
+        body{
+            margin-top:20px;
+            background:#FAFAFA;
+        }
+        .card-size{
+            margin: 10px;
+            width: 200px;
+            height: auto;
+        }
+        .predict-title-font {
+            font-size: 10px;
+        }
+        .score_font{
+            color: saddlebrown;
+        }
+        .score_font:hover{
+            color: #9FC93C;
+            text-decoration: none;
+        }
+        img{
+            width: 150px;
+            margin: 0;
+        }

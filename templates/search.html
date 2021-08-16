@@ -9,6 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -30,43 +31,10 @@
     <title>Movie delivery</title>
 
     <style>
-        * {
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-        .site-title-font {
-            color: red;
-            font-family: 'Srisakdi', cursive;
-            font-size: 27px;
-        }
-        .navbar-background{
-            background-color: black;
-            opacity: 80%;
-        }
-        .jumbotron-style{
-            border-radius: 15px;
-            font-family: 'Gamja Flower', cursive;
-            background-color: lightgoldenrodyellow;
-            padding: 30px;
-        }
-        .jumbo-font{
-            font-family: 'Gamja Flower', cursive;
-            font-size: 30px;
-        }
-        .size{
-            width: auto;
-            height: 800px;
-        }
         .wrap {
             width: 1350px;
             margin: auto;
             margin-top: 50px;
-        }
-        .background{
-            background-color:black;
-        }
-        .ranking-font{
-            font-family: 'Black Han Sans', sans-serif;
-            font-size: 30px;
         }
         .date-font-color{
             color: gray;
@@ -171,7 +139,7 @@
 <body class="background">
 <header>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top navbar-background">
-        <a class="navbar-brand" href="#" onclick="onClickHome()"><font class="site-title-font">Movie<font style="font-size: 12px" class="site-title-font">Delivery</font></font></a>
+        <a class="navbar-brand" href="#" onclick="onClickHome()"><img src="/static/logo3.JPG" alt="User Icon"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

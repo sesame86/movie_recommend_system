@@ -14,18 +14,17 @@
         }
     </script>
     <style>
-        .background {
-            background-image: url("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FQsGoG%2FbtqCxQ1YNSO%2F8qWHNtEqr4Yh0SYKNXG7Rk%2Fimg.png");
-            background-repeat:no-repeat;
-            background-position:top center;
-            background-size:cover;
-        }
         .size{
             margin-top: 40px;
             margin-bottom:20px;
             size:300px;
         }
-
+        #password {
+            margin-bottom: 40px;
+        }
+        #btnSignUp{
+            margin-bottom: 60px;
+        }
     </style>
 </head>
 <body class="background">
@@ -38,14 +37,14 @@
 
     <!-- Icon -->
     <div class="fadeIn first">
-      <img class="size" src='/static/Logo.jpg' id="icon" alt="User Icon">
+      <img class="size" src='/static/logo2.JPG' id="icon" alt="User Icon">
     </div>
 
     <!-- Login Form -->
     <form action="/login" method="POST">
-      <input type="text" id="userID" class="fadeIn second" name="userID" placeholder="ID">
-      <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
+        <input type="text" id="userID" class="fadeIn second" name="userID" placeholder="ID">
+        <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
+        <input type="submit" class="fadeIn fourth" value="Log In">
         <input type="button" id="btnSignUp" onclick="onClickSignUp()" class="fadeIn fourth" value="Sign Up">
     </form>
 
