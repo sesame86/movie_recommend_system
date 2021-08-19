@@ -9,16 +9,11 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <style>
-        .size{
-            margin-top: 40px;
-            margin-bottom:20px;
-            size:300px;
-        }
         #nickname {
             margin-bottom: 40px;
         }
         input[type=button]{
-            margin-bottom: 60px;
+            margin-bottom: 100px;
         }
     </style>
     <script>
@@ -63,28 +58,20 @@
     </script>
 </head>
 <body class="background">
-
-<!------ Include the above in your HEAD tag ---------->
-
-<div class="wrapper fadeInDown">
-  <div id="formContent">
-    <!-- Tabs Titles -->
-
-    <!-- Icon -->
-    <div class="fadeIn first">
-      <img class="size" src="/static/logo2.JPG" id="icon" alt="User Icon">
+    <div class="bg-1">
+        <div class="wrapper fadeInDown">
+          <div id="formContent">
+            <div class="fadeIn first">
+              <img src="/static/logo2.JPG" id="icon" alt="User Icon">
+            </div>
+            <form>
+                <input type="text" id="userID" class="fadeIn second" name="userID" placeholder="ID">
+                <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
+                <input type="text" id="nickname" class="fadeIn third" name="nickname" placeholder="nickname">
+                <input type="button" onclick="signup()" class="fadeIn fourth" value="Sign Up">
+            </form>
+          </div>
+        </div>
     </div>
-
-    <!-- Login Form -->
-    <form>
-        <input type="text" id="userID" class="fadeIn second" name="userID" placeholder="ID">
-        <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
-        <input type="text" id="nickname" class="fadeIn third" name="nickname" placeholder="nickname">
-        <input type="button" onclick="signup()" class="fadeIn fourth" value="Sign Up">
-    </form>
-
-
-  </div>
-</div>
 </body>
 </html>

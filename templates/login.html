@@ -14,43 +14,29 @@
         }
     </script>
     <style>
-        .size{
-            margin-top: 40px;
-            margin-bottom:20px;
-            size:300px;
-        }
         #password {
             margin-bottom: 40px;
         }
         #btnSignUp{
-            margin-bottom: 60px;
+            margin-bottom: 100px;
         }
     </style>
 </head>
 <body class="background">
-
-<!------ Include the above in your HEAD tag ---------->
-
-<div class="wrapper fadeInDown">
-  <div id="formContent">
-    <!-- Tabs Titles -->
-
-    <!-- Icon -->
-    <div class="fadeIn first">
-      <img class="size" src='/static/logo2.JPG' id="icon" alt="User Icon">
+    <div class="bg-1">
+        <div class="wrapper fadeInDown">
+      <div id="formContent">
+        <div class="fadeIn first">
+          <img src='/static/logo2.JPG' id="icon" alt="User Icon">
+        </div>
+        <form action="/login" method="POST">
+            <input type="text" id="userID" class="fadeIn second" name="userID" placeholder="ID">
+            <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
+            <input type="submit" class="fadeIn fourth" value="Log In">
+            <input type="button" id="btnSignUp" onclick="onClickSignUp()" class="fadeIn fourth" value="Sign Up">
+        </form>
+      </div>
     </div>
-
-    <!-- Login Form -->
-    <form action="/login" method="POST">
-        <input type="text" id="userID" class="fadeIn second" name="userID" placeholder="ID">
-        <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
-        <input type="submit" class="fadeIn fourth" value="Log In">
-        <input type="button" id="btnSignUp" onclick="onClickSignUp()" class="fadeIn fourth" value="Sign Up">
-    </form>
-
-
-
-  </div>
 </div>
 </body>
 </html>
