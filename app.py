@@ -218,43 +218,53 @@ def movie_recommend():
         u1 = UM_matrix_ds.loc[user].dropna()
         ratedIndex = u1.index
         nn = {}
-
-        ## 브루트 포스 알고리즘
-        #조합 가능한 모든 문자열을 하나씩 대입해 보는 방식
+        print("1")
+        # 브루트 포스 알고리즘
+        # 조합 가능한 모든 문자열을 하나씩 대입해 보는 방식
         for uid, row in UM_matrix_ds.iterrows():
             interSectionU1 = []
             interSectionU2 = []
+            print("2")
+            print(type(uid))
+            print(uid)
+
             if uid == user:
                 continue
-            for i in ratedIndex:
-                if False == math.isnan(row[i]):
-                    interSectionU1.append(u1[i])
-                    interSectionU2.append(row[i])
+                print(uid)
+            # 여기서부터
+            for index in ratedIndex:
+                print(ratedIndex)
+                if not math.isnan(row[index]):
+                    interSectionU1.append(u1[index])
+                    interSectionU2.append(row[index])
             interSectionLen = len(interSectionU1)
-
-            ## 최소 3개 교차한 아이템
+            print("3")
+            # 최소 3개 교차한 아이템
             if interSectionLen < 3:
                 continue
 
-            ## 유사도 함수
+            # 유사도 함수
             sim = simFunc(interSectionU1, interSectionU2)
-
-            if math.isnan(sim) == False:
+            print("4");
+            if not math.isnan(sim):
                 nn[uid] = sim
+                print("5")
+            # 여기까지 에러
 
-        ## top 순위 대로 정렬
+        # top 순위 대로 정렬
+        print("6")
         return sorted(nn.items(), key=itemgetter(1), reverse=True)[:(topN + 1)]
 
-    #예상 점수 구하기
+    # 예상 점수 구하기
     def predictRating(userid, nn=50, simFunc=distance_euclidean):
 
-        ## knn함수
+        # knn함수
         neighbor = nearest_neighbor_user(userid, nn, simFunc)
 
         # 비슷한 유사도를 보이는 유저 리스트
         neighbor_id = [id for id, sim in neighbor]
 
-        ## 4개이상이 NaN인 경우 제거
+        # 4개이상이 NaN인 경우 제거
         neighbor_movie = UM_matrix_ds.loc[neighbor_id].dropna(1, how='all', thresh=4)
 
         neighbor_dic = (dict(neighbor))
@@ -275,21 +285,22 @@ def movie_recommend():
 
     session_id = session['sessionID']
     primary_id_list = list(db.user.find({'_id':ObjectId(session_id)},{'_id':False,'user_id':False,'password':False,'nickname':False}))
-    #print(primary_id_list)
+    # print(primary_id_list)
     primary_id = primary_id_list[0]['primary_id']
-    #print(primary_id)
+    print(primary_id)
+    print(type(primary_id))
 
-    #print(concat_rate[concat_rate['userid']==primary_id])
-    #print(nearest_neighbor_user(primary_id, 10, distance_euclidean))
+    # print(concat_rate[concat_rate['userid']==primary_id])
+    # print(nearest_neighbor_user(primary_id, 10, distance_euclidean))
 
     result = predictRating(primary_id, nn=50, simFunc=distance_euclidean)
-    #print(result)
+    # print(result)
     predict = pd.DataFrame(result, columns=['tmdbid', 'rate'])
 
     my_rate = concat_rate[concat_rate['userid'] == primary_id].reset_index()
     my_rate = my_rate[['tmdbid', 'rate']]
 
-    #내가 본 영화 리스트에 추천 된 영화가 있으면 삭제
+    # 내가 본 영화 리스트에 추천 된 영화가 있으면 삭제
     delete_list=[]
     for i in predict.index:
         for j in my_rate.index:
