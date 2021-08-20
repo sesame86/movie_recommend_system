@@ -117,8 +117,8 @@
                 data: {},
                 success: function (response) {
                     predict = response['predict_list']
-                    //predictLength = predict.length;
-                    //console.log(predict)
+                    predictLength = predict.length;
+                    console.log(predict)
 
                     for (let index = 0; index < 50; index++){
                         tmdbid = predict[index][0];
@@ -194,7 +194,7 @@
             </ul>
             <nav class="navbar navbar-dark">
                 <form class="form-inline">
-                    <a class="btn btn-outline-danger" role="button" href="#" onclick="onClickSearch()">Search</a>
+                    <a class="btn btn-outline-info" role="button" href="#" onclick="onClickSearch()">Search</a>
                 </form>
             </nav>
             <nav class="navbar navbar-dark">
@@ -206,10 +206,10 @@
     </nav>
 </header>
     <div class="wrap">
-        <div class="jumbotron jumbotron-style" style="background-color: lightgoldenrodyellow">
-            <h1 class="display-4">🧐당신의 취향을 반영한 분석결과를 보여드릴게요</h1>
+        <div class="jumbotron jumbotron-style" style="background-color: #72f8d0">
+            <h1>🧐 당신의 취향을 반영한 분석결과를 보여드릴게요</h1>
             <p class="lead"><font class="jumbo-font">이용해 주셔서 감사합니다</font>
-                <button type="button" class="btn btn-warning" onclick="onClickSelectMovie()">
+                <button type="button" class="btn btn-light" onclick="onClickSelectMovie()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-star-fill" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM8.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.178.178 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.178.178 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.178.178 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.178.178 0 0 1-.134-.098L8.16 4.1z"></path>
                 </svg>
@@ -260,8 +260,8 @@
             </div>
         </div>
     </div>
-        <div class="jumbotron jumbotron-style" style="background-color:#C1AEEE">
-            <h1 class="display-6">🤖당신의 취향을 반영한 영화 추천</h1>
+        <div class="jumbotron jumbotron-style">
+            <h1>🤖 당신의 취향을 반영한 영화 추천</h1>
         </div>
         <table class="table table-dark list-wrap" style="border-radius: 10px">
           <thead>

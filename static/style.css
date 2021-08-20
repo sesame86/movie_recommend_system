@@ -1,24 +1,43 @@
+@font-face {
+    font-family: 'CookieRunOTF-Black';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/CookieRunOTF-Black00.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 * {
     font-family: 'Noto Sans KR', sans-serif;
+}
+body{
+    margin-top:20px;
+    background: black;
 }
 .navbar-background{
     background-color: black;
     opacity: 80%;
 }
 .jumbotron-style{
+    font-family: 'GmarketSansMedium';
+    background-color: #72f8d0;
     border-radius: 15px;
-    font-family: 'Gamja Flower', cursive;
     padding: 30px;
+    font-size: 50px;
 }
 .jumbo-font{
-    font-family: 'Gamja Flower', cursive;
+    font-family: 'GmarketSansMedium';
     font-size: 30px;
 }
 .ranking-font{
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'CookieRunOTF-Black';
     font-size: 20px;
-    color:white;
+    color:black;
     margin: 10px;
+    background-color: #14dba0;;
 }
 .size {
     width: auto;
@@ -26,10 +45,6 @@
 }
 .background {
     background-color: black;
-}
-body{
-    margin-top:20px;
-    background:#FAFAFA;
 }
 .card-size{
     margin: 10px;
