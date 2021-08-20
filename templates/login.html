@@ -22,21 +22,22 @@
         }
     </style>
 </head>
-<body class="background">
-    <div class="bg-1">
+<body >
+    <div class="stars"></div>
+    <div class="twinkling">
         <div class="wrapper fadeInDown">
-      <div id="formContent">
-        <div class="fadeIn first">
-          <img src='/static/logo2.JPG' id="icon" alt="User Icon">
+          <div id="formContent">
+            <div class="fadeIn first">
+              <img src='/static/logo2.JPG' id="icon" alt="User Icon">
+            </div>
+            <form action="/login" method="POST">
+                <input type="text" id="userID" class="fadeIn second" name="userID" placeholder="ID">
+                <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
+                <input type="submit" class="fadeIn fourth" value="Log In">
+                <input type="button" id="btnSignUp" onclick="onClickSignUp()" class="fadeIn fourth" value="Sign Up">
+            </form>
+          </div>
         </div>
-        <form action="/login" method="POST">
-            <input type="text" id="userID" class="fadeIn second" name="userID" placeholder="ID">
-            <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
-            <input type="submit" class="fadeIn fourth" value="Log In">
-            <input type="button" id="btnSignUp" onclick="onClickSignUp()" class="fadeIn fourth" value="Sign Up">
-        </form>
-      </div>
     </div>
-</div>
 </body>
 </html>
