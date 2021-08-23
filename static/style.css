@@ -65,3 +65,7 @@ img{
     width: 150px;
     margin: 0;
 }
+.badge{
+    border-radius: 20px;
+    padding: 5px 20px 10px 20px;
+}

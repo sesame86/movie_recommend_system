@@ -11,8 +11,7 @@ from pymongo import MongoClient
 app = Flask(__name__)
 app.secret_key = 'sparta'
 
-# client = MongoClient('mongodb://test:test@54.180.153.202', 27017)
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@3.38.98.1', 27017)
 db = client.MovieDB
 
 @app.route('/intro', methods=['GET'])
@@ -191,7 +190,7 @@ def create_movie():
 
     Mymovie_list = {
         'userid':userid_recive,
-        'tmdbid':tmdbid_recieve,
+        'tmdbid':int(tmdbid_recieve),
         'title':title_receive,
         'genre':genre_receive,
         'overview':overview_receive,
@@ -209,7 +208,7 @@ def movie_recommend():
 
     # pivote table
     UM_matrix_ds = pd.pivot_table(concat_rate, index='userid', columns='tmdbid', values='rate')
-    #print(UM_matrix_ds)
+    print(UM_matrix_ds)
     def distance_euclidean(a, b):
         return 1 / (distance.euclidean(a, b) + 1)
 
@@ -229,14 +228,19 @@ def movie_recommend():
             print(uid)
 
             if uid == user:
+                print(type(user))
+                print(user)
                 continue
-                print(uid)
+                print(user)
             # 여기서부터
-            for index in ratedIndex:
+            # 영화 이름중에서
+            for i in ratedIndex:
                 print(ratedIndex)
-                if not math.isnan(row[index]):
-                    interSectionU1.append(u1[index])
-                    interSectionU2.append(row[index])
+                #row의 값이 na가 아니면
+                if not math.isnan(row[i]):
+                    #저장해라
+                    interSectionU1.append(u1[i])
+                    interSectionU2.append(row[i])
             interSectionLen = len(interSectionU1)
             print("3")
             # 최소 3개 교차한 아이템
@@ -293,7 +297,7 @@ def movie_recommend():
     # print(concat_rate[concat_rate['userid']==primary_id])
     # print(nearest_neighbor_user(primary_id, 10, distance_euclidean))
 
-    result = predictRating(primary_id, nn=50, simFunc=distance_euclidean)
+    result = predictRating(float(primary_id), nn=50, simFunc=distance_euclidean)
     # print(result)
     predict = pd.DataFrame(result, columns=['tmdbid', 'rate'])
 

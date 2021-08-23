@@ -118,7 +118,7 @@
                 success: function (response) {
                     predict = response['predict_list']
                     predictLength = predict.length;
-                    console.log(predict)
+                    console.log(response)
 
                     for (let index = 0; index < 50; index++){
                         tmdbid = predict[index][0];
