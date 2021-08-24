@@ -204,11 +204,12 @@ def create_movie():
 @app.route('/recommendMovie', methods=['GET'])
 def movie_recommend():
     concat_rate = pd.DataFrame(db.concat_rate.find({}, {'_id': False}))
-    #print(concat_rate)
+    # print(concat_rate)
 
     # pivote table
     UM_matrix_ds = pd.pivot_table(concat_rate, index='userid', columns='tmdbid', values='rate')
-    print(UM_matrix_ds)
+    # print(UM_matrix_ds)
+
     def distance_euclidean(a, b):
         return 1 / (distance.euclidean(a, b) + 1)
 
@@ -217,46 +218,34 @@ def movie_recommend():
         u1 = UM_matrix_ds.loc[user].dropna()
         ratedIndex = u1.index
         nn = {}
-        print("1")
         # 브루트 포스 알고리즘
         # 조합 가능한 모든 문자열을 하나씩 대입해 보는 방식
         for uid, row in UM_matrix_ds.iterrows():
             interSectionU1 = []
             interSectionU2 = []
-            print("2")
-            print(type(uid))
-            print(uid)
 
             if uid == user:
-                print(type(user))
-                print(user)
                 continue
-                print(user)
-            # 여기서부터
+
             # 영화 이름중에서
             for i in ratedIndex:
-                print(ratedIndex)
                 #row의 값이 na가 아니면
                 if not math.isnan(row[i]):
                     #저장해라
                     interSectionU1.append(u1[i])
                     interSectionU2.append(row[i])
             interSectionLen = len(interSectionU1)
-            print("3")
+
             # 최소 3개 교차한 아이템
             if interSectionLen < 3:
                 continue
 
             # 유사도 함수
             sim = simFunc(interSectionU1, interSectionU2)
-            print("4");
             if not math.isnan(sim):
                 nn[uid] = sim
-                print("5")
-            # 여기까지 에러
 
         # top 순위 대로 정렬
-        print("6")
         return sorted(nn.items(), key=itemgetter(1), reverse=True)[:(topN + 1)]
 
     # 예상 점수 구하기
@@ -291,13 +280,13 @@ def movie_recommend():
     primary_id_list = list(db.user.find({'_id':ObjectId(session_id)},{'_id':False,'user_id':False,'password':False,'nickname':False}))
     # print(primary_id_list)
     primary_id = primary_id_list[0]['primary_id']
-    print(primary_id)
-    print(type(primary_id))
+    # print(primary_id)
+    # print(type(primary_id))
 
     # print(concat_rate[concat_rate['userid']==primary_id])
     # print(nearest_neighbor_user(primary_id, 10, distance_euclidean))
 
-    result = predictRating(float(primary_id), nn=50, simFunc=distance_euclidean)
+    result = predictRating(primary_id, nn=50, simFunc=distance_euclidean)
     # print(result)
     predict = pd.DataFrame(result, columns=['tmdbid', 'rate'])
 
