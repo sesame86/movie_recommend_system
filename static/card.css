@@ -114,9 +114,11 @@ a:hover {
 }
 
 .movie-title {
+  font-family: 'Do Hyeon', sans-serif;
   font-size: 24px;
   margin: 0;
   display: table-cell;
+  color: black;
 }
 
 
