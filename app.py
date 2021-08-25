@@ -146,9 +146,9 @@ def delete_movie():
     #print(primary_id)
 
     id_receive = request.form['id_give']
-
-    db.Mymovie_list.delete_one({'userid': primary_id, 'tmdbid': id_receive})
     int_id = int(id_receive)
+
+    db.Mymovie_list.delete_one({'userid': primary_id, 'tmdbid': int_id})
     db.concat_rate.delete_one({'userid': primary_id, 'tmdbid': int_id})
     return jsonify({'result': 'success'})
 
